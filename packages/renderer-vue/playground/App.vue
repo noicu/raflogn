@@ -5,12 +5,24 @@
                 <CustomNodeRenderer :key="nodeProps.node.id" v-bind="nodeProps" />
             </template>
         </baklava-editor>
-        <button @click="calculate">Calculate</button>
-        <button @click="save">Save</button>
-        <button @click="load">Load</button>
-        <button @click="setSelectItems">Set Select Items</button>
-        <button @click="changeGridSize">Change Grid Size</button>
-        <button @click="createSubgraph">Create Subgraph</button>
+        <button @click="calculate">
+            演算
+        </button>
+        <button @click="save">
+            保存
+        </button>
+        <button @click="load">
+            加载
+        </button>
+        <button @click="setSelectItems">
+            设置选择项目
+        </button>
+        <button @click="changeGridSize">
+            更改网格大小（随机）
+        </button>
+        <button @click="createSubgraph">
+            创建子图
+        </button>
     </div>
 </template>
 
@@ -125,7 +137,12 @@ export default defineComponent({
 
 <style>
 #app {
-    margin: 30px 0;
-    height: calc(100vh - 60px);
+    /* margin: 30px 0; */
+    height: calc(100vh - 25px);
+}
+
+html,body{
+    margin: 0;
+    padding: 0;
 }
 </style>

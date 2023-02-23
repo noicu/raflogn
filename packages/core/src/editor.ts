@@ -22,7 +22,7 @@ export interface INodeTypeInformation extends Required<IRegisterNodeTypeOptions>
     type: AbstractNodeConstructor;
 }
 
-/** The main model class for Raflogn */
+/** Raflogn 的主要模型类 */
 export class Editor implements IBaklavaEventEmitter, IBaklavaTapable {
     public events = {
         loaded: new BaklavaEvent<void, Editor>(this),
@@ -56,7 +56,7 @@ export class Editor implements IBaklavaEventEmitter, IBaklavaTapable {
     private _graph = new Graph(this);
     private _graphTemplates: GraphTemplate[] = [];
 
-    /** List of all registered node types */
+    /** 所有已注册节点类型的列表 */
     public get nodeTypes(): ReadonlyMap<string, INodeTypeInformation> {
         return this._nodeTypes;
     }
@@ -66,20 +66,20 @@ export class Editor implements IBaklavaEventEmitter, IBaklavaTapable {
         return this._graph;
     }
 
-    /** List of all registered graph templates (subgraphs) */
+    /** 所有已注册图形模板（子图）的列表 */
     public get graphTemplates(): ReadonlyArray<GraphTemplate> {
         return this._graphTemplates;
     }
 
-    /** Set of all graphs in the editor, including subgraphs */
+    /** 编辑器中所有图形的集合，包括子图 */
     public get graphs(): ReadonlySet<Graph> {
         return this._graphs;
     }
 
     /**
-     * Register a new node type
-     * @param type Actual type / constructor of the node
-     * @param options Optionally specify a title and/or a category for this node
+     * 注册一个新的节点类型
+     * @param type 节点的实际类型/构造函数
+     * @param options 可选择为此节点指定标题和/或类别
      */
     public registerNodeType(type: AbstractNodeConstructor, options?: IRegisterNodeTypeOptions): void {
         if (this.events.beforeRegisterNodeType.emit({ type, options })) {
