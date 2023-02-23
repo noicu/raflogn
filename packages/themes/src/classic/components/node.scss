@@ -8,7 +8,7 @@
     transition: box-shadow var(--baklava-visual-transition), filter var(--baklava-visual-transition);
 
     &:hover {
-        box-shadow: 0 0 0 0.35px var(--baklava-node-color-selected);
+        box-shadow: 0 0 0 0.6px var(--baklava-node-color-selected);
     }
 
     &.--selected {
