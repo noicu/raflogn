@@ -1,0 +1,33 @@
+{
+    "name": "@raflogn/events",
+    "version": "0.0.1",
+    "description": "Implementation of the Raflogn event system. Mainly intended for internal use in the Raflogn ecosystem",
+    "author": "noicu <1018496570@qq.com>",
+    "homepage": "https://raflogn.no.icu",
+    "license": "MIT",
+    "files": [
+        "dist/**/*"
+    ],
+    "main": "dist/cjs/index.js",
+    "types": "dist/index.d.ts",
+    "module": "dist/esm/index.js",
+    "scripts": {
+        "build:esm": "tsc --declaration false --outDir dist/esm --module esnext",
+        "build:cjs": "tsc --declaration false --outDir dist/cjs",
+        "build:declaration": "tsc --emitDeclarationOnly --outDir dist",
+        "build": "rimraf dist && yarn run build:esm && yarn run build:cjs && yarn run build:declaration"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/noicu/raflogn.git"
+    },
+    "bugs": {
+        "url": "https://github.com/noicu/raflogn/issues"
+    },
+    "devDependencies": {
+        "typescript": "^4.5.4"
+    }
+}

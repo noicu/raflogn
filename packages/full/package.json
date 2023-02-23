@@ -1,0 +1,35 @@
+{
+    "name": "raflogn",
+    "version": "0.0.1",
+    "private": true,
+    "description": "Full installation of Raflogn including the core and all plugins",
+    "author": "noicu <1018496570@qq.com>",
+    "homepage": "https://raflogn.no.icu",
+    "license": "MIT",
+    "files": [
+        "dist/**/!(report.html)",
+        "lib/**/*"
+    ],
+    "main": "lib/index.js",
+    "types": "lib/index.d.ts",
+    "scripts": {
+        "build": "rimraf dist && webpack && tsc",
+        "version": "node updateDependencies.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/noicu/raflogn.git"
+    },
+    "bugs": {
+        "url": "https://github.com/noicu/raflogn/issues"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "dependencies": {
+        "@raflogn/core": "0.0.1",
+        "@raflogn/engine": "0.0.1",
+        "@raflogn/interface-types": "0.0.1",
+        "@raflogn/renderer-vue": "0.0.1"
+    }
+}

@@ -1,0 +1,130 @@
+# Graph Execution
+
+Raflogn not only offers a way to edit compute graphs but also to execute them.
+This is done by _engines_. There are different types of engines which execute the graph in different ways.
+
+-   [Dependency Engine](./dependency)
+-   [Forward Engine](./forward)
+
+::: info
+If you want the behavior of Raflogn V1's engine, use the dependency engine.
+:::
+
+There are, however, some prerequisites that are indenpendent of the engine implementation:
+
+## Node calculate function
+
+Each node needs to have a caluate function.
+The calculate function receives the node inputs as a JavaScript object (and optionally some [global calculation data](#global-calculation-data)), does the calculation and returns the values for the outputs as a JavaScript object.
+
+Let's take a simple "Add Node" as an example.
+Mathematically speaking, it should perform this function: `f(a, b) = a + b`.
+This is done in Raflogn as follows:
+
+```js
+import { defineNode, NodeInterface } from "@raflogn/core";
+import { NumberInterface, SelectInterface } from "@raflogn/renderer-vue";
+
+export default defineNode({
+    type: "AddNode",
+    inputs: {
+        number1: () => new NumberInterface("Number", 1),
+        number2: () => new NumberInterface("Number", 10),
+    },
+    outputs: {
+        result: () => new NodeInterface("Result", 0),
+    },
+    calculate(inputs) {
+        return {
+            result: inputs.number1 + inputs.number2,
+        };
+    },
+});
+```
+
+`inputs` in this case has the following format:
+
+```js
+{
+    number1: 1,
+    number2: 10
+}
+```
+
+Of course the actual values depend on the values of the input interfaces.
+
+The calculate function needs to return an object that contains all the outputs as keys mapping to their corresponding values (see example above).
+
+## Setting up the engine
+
+The general setup is independent of which engine you choose.
+
+```js
+import { Editor } from "@raflogn/core";
+import { DependencyEngine } from "@raflogn/engine";
+
+const editor = new Editor();
+const engine = new DependencyEngine(editor);
+engine.start();
+```
+
+## Global calculation data
+
+You can provide data that is passed to every node's `calculate()` function as a second parameter.
+There are two ways to provide the global calculation to the engine:
+
+### When using the engine in manual mode with `runOnce`
+
+```ts
+engine.runOnce({ offset: 5 });
+```
+
+### When using the engine in automatic mode (after `engine.start()`)
+
+In this case you need to register a hook beforehand.
+This hook is called for every calculation; except the ones triggered manually with `engine.runOnce()`
+```ts
+const token = Symbol("token");
+engine.hooks.gatherCalculationData.subscribe(token, () => {
+    return { offset: 5 };
+});
+engine.start();
+```
+
+You can find more information about hooks in the documentation for the [event system](/event-system).
+
+### Consuming global data
+
+You can now use the global data in the `calculate` function of your nodes:
+
+```ts
+export default defineNode({
+    // ...
+    calculate(inputs, global) {
+        return {
+            result: inputs.number1 + inputs.number2 + global.offset,
+        };
+    },
+});
+```
+
+## Applying the result to the graph
+
+By default, you just get the calculated values of the output interfaces in the calculation result object.
+The values are not applied to the output interfaces inside the graph.
+If you want to use the output interfaces to display the calculation result in the graph, you can use the `applyResult` function provided by the engine:
+
+```ts
+import { applyResult } from "@raflogn/engine";
+
+const token = Symbol();
+engine.events.afterRun.subscribe(token, (result) => {
+    engine.pause();
+    applyResult(result, editor);
+    engine.resume();
+});
+```
+
+::: warning
+It is important to call `engine.pause()` before calling `applyResult()`. Otherwise it would lead to an infinite loop.
+:::

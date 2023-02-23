@@ -1,0 +1,32 @@
+{
+    "name": "@raflogn/themes",
+    "version": "0.0.1",
+    "description": "Themes for Wiring",
+    "author": "noicu <1018496570@qq.com>",
+    "homepage": "https://raflogn.no.icu",
+    "license": "MIT",
+    "files": [
+        "dist/**/*"
+    ],
+    "scripts": {
+        "build": "ts-node src/build.ts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/noicu/raflogn.git"
+    },
+    "bugs": {
+        "url": "https://github.com/noicu/raflogn/issues"
+    },
+    "devDependencies": {
+        "@types/rimraf": "^3.0.2",
+        "@types/sass": "^1.43.1",
+        "rimraf": "^3.0.2",
+        "sass": "^1.45.2",
+        "ts-node": "^10.4.0",
+        "typescript": "^4.5.4"
+    },
+    "publishConfig": {
+        "access": "public"
+    }
+}

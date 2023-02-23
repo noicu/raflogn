@@ -1,0 +1,15 @@
+{
+    "excludeExternals": true,
+    "excludePrivate": true,
+    "name": "Reference - Raflogn",
+    "gitRevision": "master",
+    "tsconfig": "typedoc.tsconfig.json",
+    "out": "docs/public/api",
+    "entryPoints": [
+        "packages/core/src/index.ts",
+        "packages/events/src/index.ts",
+        "packages/engine/src/index.ts",
+        "packages/interface-types/src/index.ts",
+        "packages/renderer-vue/src/index.ts"
+    ]
+}
