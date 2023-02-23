@@ -6,6 +6,7 @@
     position: absolute;
     filter: drop-shadow(0 0 3px #000000cc);
     transition: box-shadow var(--baklava-visual-transition), filter var(--baklava-visual-transition);
+    box-shadow: 0 0 0 0.6px #00000000;
 
     &:hover {
         box-shadow: 0 0 0 0.6px var(--baklava-node-color-selected);
