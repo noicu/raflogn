@@ -1,6 +1,6 @@
 {
     "name": "@raflogn/renderer-vue",
-    "version": "2.0.2-beta.3",
+    "version": "0.1.0",
     "description": "Vue frontend for RaflognJS",
     "author": "noicu <office@no.icu>",
     "homepage": "https://noicu.github.io/raflogn",
@@ -30,8 +30,8 @@
         "url": "https://github.com/noicu/raflogn/issues"
     },
     "dependencies": {
-        "@raflogn/core": "^2.0.2-beta.3",
-        "@raflogn/events": "^2.0.2-beta.3"
+        "@raflogn/core": "^0.1.0",
+        "@raflogn/events": "^0.1.0"
     },
     "devDependencies": {
         "@types/resize-observer-browser": "^0.1.7",

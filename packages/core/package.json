@@ -1,6 +1,6 @@
 {
     "name": "@raflogn/core",
-    "version": "2.0.2-beta.3",
+    "version": "0.1.0",
     "description": "Core logic of RaflognJS, a graph editor / node editor for the web",
     "author": "noicu <office@no.icu>",
     "homepage": "https://noicu.github.io/raflogn",
@@ -26,7 +26,7 @@
         "url": "https://github.com/noicu/raflogn/issues"
     },
     "dependencies": {
-        "@raflogn/events": "^2.0.2-beta.3",
+        "@raflogn/events": "^0.1.0",
         "uuid": "^9.0.0"
     },
     "devDependencies": {

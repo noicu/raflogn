@@ -1,6 +1,6 @@
 {
     "name": "raflogn",
-    "version": "2.0.2-beta.3",
+    "version": "0.1.0",
     "description": "Full installation of RaflognJS including the core and all plugins",
     "author": "noicu <office@no.icu>",
     "homepage": "https://noicu.github.io/raflogn",
@@ -29,11 +29,11 @@
         "access": "public"
     },
     "dependencies": {
-        "@raflogn/core": "^2.0.2-beta.3",
-        "@raflogn/engine": "^2.0.2-beta.3",
-        "@raflogn/interface-types": "^2.0.2-beta.3",
-        "@raflogn/renderer-vue": "^2.0.2-beta.3",
-        "@raflogn/themes": "^2.0.2-beta.3"
+        "@raflogn/core": "^0.1.0",
+        "@raflogn/engine": "^0.1.0",
+        "@raflogn/interface-types": "^0.1.0",
+        "@raflogn/renderer-vue": "^0.1.0",
+        "@raflogn/themes": "^0.1.0"
     },
     "devDependencies": {
         "esbuild": "^0.16.12",

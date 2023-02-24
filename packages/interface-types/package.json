@@ -1,6 +1,6 @@
 {
     "name": "@raflogn/interface-types",
-    "version": "2.0.2-beta.3",
+    "version": "0.1.0",
     "description": "Add types to node interfaces for RaflognJS",
     "author": "noicu <office@no.icu>",
     "homepage": "https://noicu.github.io/raflogn",
@@ -26,9 +26,9 @@
         "url": "https://github.com/noicu/raflogn/issues"
     },
     "dependencies": {
-        "@raflogn/core": "^2.0.2-beta.3",
-        "@raflogn/engine": "^2.0.2-beta.3",
-        "@raflogn/renderer-vue": "^2.0.2-beta.3"
+        "@raflogn/core": "^0.1.0",
+        "@raflogn/engine": "^0.1.0",
+        "@raflogn/renderer-vue": "^0.1.0"
     },
     "devDependencies": {
         "@types/jest": "^29.2.4",
