@@ -1,11 +1,39 @@
 .baklava-node-interface[data-interface-type="string"] .__port {
-    background-color: green;
+    border-color: #ff7900;
+}
+
+.baklava-node-interface[data-interface-type="string"] .__port::before {
+    background-color: #ff7900;
 }
 
 .baklava-node-interface[data-interface-type="number"] .__port {
-    background-color: red;
+    border-color: #4caf50;
+}
+
+.baklava-node-interface[data-interface-type="number"] .__port::before {
+    background-color: #4caf50;
 }
 
 .baklava-node-interface[data-interface-type="boolean"] .__port {
+    border-color: #e91e63;
+}
+
+.baklava-node-interface[data-interface-type="boolean"] .__port::before {
+    background-color: #e91e63;
+}
+
+.baklava-node-interface[data-interface-type="array"] .__port {
+    border-color: purple;
+}
+
+.baklava-node-interface[data-interface-type="array"] .__port::before {
+    background-color: purple;
+}
+
+.baklava-node-interface[data-interface-type="object"] .__port {
+    border-color: purple;
+}
+
+.baklava-node-interface[data-interface-type="object"] .__port::before {
     background-color: purple;
 }

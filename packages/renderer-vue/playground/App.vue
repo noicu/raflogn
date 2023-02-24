@@ -45,6 +45,7 @@ import CommentNode from "./CommentNode";
 import InterfaceTestNode from "./InterfaceTestNode";
 import SelectTestNode from "./SelectTestNode";
 import SidebarNode from "./SidebarNode";
+import ArrayNode from "./ArrayNode";
 
 import { stringType, numberType, booleanType } from "./interfaceTypes";
 
@@ -87,6 +88,8 @@ export default defineComponent({
         editor.registerNodeType(InterfaceTestNode);
         editor.registerNodeType(SelectTestNode);
         editor.registerNodeType(SidebarNode);
+        editor.registerNodeType(ArrayNode);
+        
         editor.graph.addNode(new TestNode());
         editor.graph.addNode(new TestNode());
         editor.graph.addNode(new TestNode());
