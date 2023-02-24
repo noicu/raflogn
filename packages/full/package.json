@@ -29,7 +29,7 @@
     "dependencies": {
         "@raflogn/core": "0.0.1",
         "@raflogn/engine": "0.0.1",
-        "@raflogn/interface-types": "0.0.1",
-        "@raflogn/renderer-vue": "0.0.1"
+        "@raflogn/interface-types": "0.0.1-alpha.1",
+        "@raflogn/renderer-vue": "0.0.1-alpha.1"
     }
 }
