@@ -4,20 +4,31 @@
 
     .__port {
         position: absolute;
-        width: 10px;
-        height: 10px;
-        background: white;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
-        top: calc(50% - 5px);
+        top: calc(50% - 10px);
         cursor: crosshair;
+        border: 2px solid #eee;
+        &::before{
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #eee;
+        }
     }
 
     &.--input {
         text-align: left;
-        padding-left: 0.5em;
+        // padding-left: 0.5em;
 
         .__port {
-            left: -1.1em;
+            left: -2.5em;
         }
     }
     &.--output {
@@ -25,7 +36,7 @@
         padding-right: 0.5em;
 
         .__port {
-            right: -1.1em;
+            right: -2.5em;
         }
     }
 }
