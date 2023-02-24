@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <EditorComponent :view-model="baklavaView">
+        <EditorComponent :view-model="raflognView">
             <template #node="nodeProps">
                 <CustomNodeRenderer :key="nodeProps.node.id" v-bind="nodeProps" />
             </template>
@@ -37,11 +37,11 @@ import DynamicNode from "./DynamicNode";
 import { stringType, numberType, booleanType } from "./interfaceTypes";
 
 const token = Symbol("token");
-const baklavaView = useRaflogn();
-const editor = baklavaView.editor;
+const raflognView = useRaflogn();
+const editor = raflognView.editor;
 
-(window as any).editor = baklavaView.editor;
-baklavaView.settings.enableMinimap = true;
+(window as any).editor = raflognView.editor;
+raflognView.settings.enableMinimap = true;
 
 const engine = new DependencyEngine(editor);
 engine.events.afterRun.subscribe(token, (r) => {
@@ -54,7 +54,7 @@ engine.hooks.gatherCalculationData.subscribe(token, () => "def");
 engine.start();
 
 const nodeInterfaceTypes = new RaflognInterfaceTypes(editor, {
-    viewPlugin: baklavaView,
+    viewPlugin: raflognView,
     engine,
 });
 nodeInterfaceTypes.addTypes(stringType, numberType, booleanType);
@@ -110,11 +110,11 @@ const setSelectItems = () => {
 };
 
 const changeGridSize = () => {
-    baklavaView.settings.background.gridSize = Math.round(Math.random() * 100) + 100;
+    raflognView.settings.background.gridSize = Math.round(Math.random() * 100) + 100;
 };
 
 const createSubgraph = () => {
-    baklavaView.commandHandler.executeCommand<Commands.CreateSubgraphCommand>(Commands.CREATE_SUBGRAPH_COMMAND);
+    raflognView.commandHandler.executeCommand<Commands.CreateSubgraphCommand>(Commands.CREATE_SUBGRAPH_COMMAND);
 };
 </script>
 

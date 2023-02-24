@@ -30,7 +30,7 @@ Apart from the [standard CSS classes](#list-of-css-classes), Raflogn also sets c
 For example, to make all nodes of type `MyNodeType` have a blue background, you can use the following CSS:
 
 ```css
-.baklava-node[data-node-type="MyNodeType"] {
+.raflogn-node[data-node-type="MyNodeType"] {
     background-color: lightblue;
 }
 ```
@@ -83,9 +83,9 @@ import MyNodeRenderer from "./MyNodeRenderer.vue";
 Below you can find a list of CSS classes used in Raflogn:
 
 -   **Editor:**
-    -   `baklava-editor`: Base class for the editor
+    -   `raflogn-editor`: Base class for the editor
 -   **Nodes:**
-    -   `baklava-node`: Base class for each node
+    -   `raflogn-node`: Base class for each node
     -   `--selected`: Applied when a node is selected
     -   `--dragging`: Applied when a node is being dragged
     -   `--two-column`: Applied if a node is a two-column node
@@ -97,18 +97,18 @@ Below you can find a list of CSS classes used in Raflogn:
         -   `__inputs`: Container for all inputs
         -   `__outputs`: Container for all outputs
 -   **Node Interfaces:**
-    -   `baklava-node-interface`: Base class for each node interface
+    -   `raflogn-node-interface`: Base class for each node interface
     -   `--input`: Applied when the node interface is an input
     -   `--output`: Applied when the node interface is an output
     -   `--connected`: Applied when the node interface has a connection
     -   `__port`: The "dot" via which the node interface can be connected
 -   **Connection:**
-    -   `baklava-connection`: Base class for each connection
+    -   `raflogn-connection`: Base class for each connection
     -   `--temporary`: Applied when the connection is still being dragged (in the process of being created or changed)
     -   `--allowed`: Applied when the connection can be created (the default styles display the connection green in this case)
     -   `--forbidden`: Applied when the connection can not be created (the default styles display the connection red in this case) or when this connection would be destroyed when creating a different connection
 -   **Sidebar:**
-    -   `baklava-sidebar`: Base class for the sidebar
+    -   `raflogn-sidebar`: Base class for the sidebar
     -   `--open`: Applied when the sidebar should be visible
     -   `__resizer`: Handle for resizing the sidebar
     -   `__header`: Header of the sidebar.
@@ -116,8 +116,8 @@ Below you can find a list of CSS classes used in Raflogn:
         -   `__node-name`: The title of the currently selected node
     -   `__interface`: Each interface shown in the sidebar
 -   **Toolbar:**
-    -   `baklava-toolbar`: Base class for the toolbar
-    -   `baklava-toolbar-entry`: Base class for each entry in the toolbar
-    -   `baklava-toolbar-button`: This class is applied to every entry that is clickable
+    -   `raflogn-toolbar`: Base class for the toolbar
+    -   `raflogn-toolbar-entry`: Base class for each entry in the toolbar
+    -   `raflogn-toolbar-button`: This class is applied to every entry that is clickable
 -   **Others:**
-    -   `baklava-node-palette`: Base class for the node palette
+    -   `raflogn-node-palette`: Base class for the node palette

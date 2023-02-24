@@ -12,7 +12,7 @@ export interface IGraphNode {
     subgraph: Graph | undefined;
 }
 
-export const GRAPH_NODE_TYPE_PREFIX = "__baklava_GraphNode-";
+export const GRAPH_NODE_TYPE_PREFIX = "__raflogn_GraphNode-";
 
 export function getGraphNodeTypeString(template: GraphTemplate): string {
     return GRAPH_NODE_TYPE_PREFIX + template.id;

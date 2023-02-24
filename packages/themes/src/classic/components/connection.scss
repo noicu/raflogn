@@ -1,6 +1,6 @@
-.baklava-connection {
-    stroke: var(--baklava-color-connection-default);
-    stroke-width: 2px;
+.raflogn-connection {
+    stroke: var(--raflogn-color-connection-default);
+    stroke-width: 4px;
     fill: none;
 
     &.--temporary {
@@ -18,10 +18,10 @@
     }
 
     &.--allowed {
-        stroke: var(--baklava-color-connection-allowed);
+        stroke: var(--raflogn-color-connection-allowed);
     }
 
     &.--forbidden {
-        stroke: var(--baklava-color-connection-forbidden);
+        stroke: var(--raflogn-color-connection-forbidden);
     }
 }

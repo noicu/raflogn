@@ -1,5 +1,5 @@
 <template>
-    <div class="baklava-node-palette">
+    <div class="raflogn-node-palette">
         <section v-for="c in categories" :key="c.name">
             <h1 v-if="c.name !== 'default'">
                 {{ c.name }}
@@ -14,7 +14,7 @@
         </section>
     </div>
     <transition name="fade">
-        <div v-if="draggedNode" class="baklava-dragged-node" :style="draggedNodeStyles">
+        <div v-if="draggedNode" class="raflogn-dragged-node" :style="draggedNodeStyles">
             <PaletteEntry :type="draggedNode.type" :title="draggedNode.nodeInformation.title" />
         </div>
     </transition>

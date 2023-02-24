@@ -1,23 +1,23 @@
-.baklava-input {
-    background-color: var(--baklava-control-color-background);
-    color: var(--baklava-control-color-foreground);
-    caret-color: var(--baklava-control-color-primary);
+.raflogn-input {
+    background-color: var(--raflogn-control-color-background);
+    color: var(--raflogn-control-color-foreground);
+    caret-color: var(--raflogn-control-color-primary);
     border: none;
-    border-radius: var(--baklava-control-border-radius);
+    border-radius: var(--raflogn-control-border-radius);
     padding: 0.45em 0.75em;
     width: 100%;
-    transition: background-color var(--baklava-visual-transition);
+    transition: background-color var(--raflogn-visual-transition);
     font-size: inherit;
     font: inherit;
 
     &:hover {
-        background-color: var(--baklava-control-color-hover);
+        background-color: var(--raflogn-control-color-hover);
     }
     &:active {
-        background-color: var(--baklava-control-color-active);
+        background-color: var(--raflogn-control-color-active);
     }
     &:focus-visible {
-        outline: 1px solid var(--baklava-control-color-primary);
+        outline: 1px solid var(--raflogn-control-color-primary);
     }
 
     &[type="number"]::-webkit-inner-spin-button,
@@ -27,6 +27,6 @@
     }
 
     &.--invalid {
-        box-shadow: 0 0 2px 2px var(--baklava-control-color-error);
+        box-shadow: 0 0 2px 2px var(--raflogn-control-color-error);
     }
 }

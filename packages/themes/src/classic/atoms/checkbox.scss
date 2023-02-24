@@ -1,4 +1,4 @@
-.baklava-checkbox {
+.raflogn-checkbox {
     display: flex;
     padding: 0.35em 0;
     cursor: pointer;
@@ -7,26 +7,26 @@
 
     .__checkmark-container {
         display: flex;
-        background-color: var(--baklava-control-color-background);
-        border-radius: var(--baklava-control-border-radius);
-        transition: background-color var(--baklava-visual-transition);
+        background-color: var(--raflogn-control-color-background);
+        border-radius: var(--raflogn-control-border-radius);
+        transition: background-color var(--raflogn-visual-transition);
         width: 18px;
         height: 18px;
     }
     &:hover .__checkmark-container {
-        background-color: var(--baklava-control-color-hover);
+        background-color: var(--raflogn-control-color-hover);
     }
     &:active .__checkmark-container {
-        background-color: var(--baklava-control-color-active);
+        background-color: var(--raflogn-control-color-active);
     }
 
     .__checkmark {
         stroke-dasharray: 15;
         stroke-dashoffset: 15;
-        stroke: var(--baklava-control-color-foreground);
+        stroke: var(--raflogn-control-color-foreground);
         stroke-width: 2px;
         fill: none;
-        transition: stroke-dashoffset var(--baklava-visual-transition);
+        transition: stroke-dashoffset var(--raflogn-visual-transition);
     }
 
     &.--checked {
@@ -35,7 +35,7 @@
         }
 
         & .__checkmark-container {
-            background-color: var(--baklava-control-color-primary);
+            background-color: var(--raflogn-control-color-primary);
         }
     }
 

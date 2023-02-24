@@ -1,6 +1,6 @@
 <template>
     <transition name="slide-fade">
-        <div v-show="modelValue" ref="el" class="baklava-context-menu" :class="classes" :style="styles">
+        <div v-show="modelValue" ref="el" class="raflogn-context-menu" :class="classes" :style="styles">
             <template v-for="(item, index) in itemsWithHoverProperty">
                 <div v-if="item.isDivider" :key="`d-${index}`" class="divider" />
 

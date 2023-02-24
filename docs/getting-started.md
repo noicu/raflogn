@@ -33,10 +33,10 @@ Now you can use Raflogn in your Vue application:
         If you directly use the editor in the <body> element, make sure to use
         a wrapper <div> with specified width and height properties:
         <div style="width: 90vw; height: 90vh">
-            <baklava-editor :view-model="baklava" />
+            <raflogn-editor :view-model="raflogn" />
         </div>
     -->
-    <baklava-editor :view-model="baklava" />
+    <raflogn-editor :view-model="raflogn" />
 </template>
 
 <script lang="ts">
@@ -46,11 +46,11 @@ import "@raflogn/themes/dist/syrup-dark.css";
 
 export default defineComponent({
     components: {
-        "baklava-editor": EditorComponent,
+        "raflogn-editor": EditorComponent,
     },
     setup() {
-        const baklava = useRaflogn();
-        return { baklava };
+        const raflogn = useRaflogn();
+        return { raflogn };
     },
 });
 </script>
@@ -88,9 +88,9 @@ Now register the node type so the editor knows it exists:
 import MyNode from "./MyNode";
 
 // this code is from the setup function above
-const baklava = useRaflogn();
-baklava.editor.registerNodeType(MyNode);
-return { baklava };
+const raflogn = useRaflogn();
+raflogn.editor.registerNodeType(MyNode);
+return { raflogn };
 ```
 
 That's it! You should now be able to create nodes and connect them.

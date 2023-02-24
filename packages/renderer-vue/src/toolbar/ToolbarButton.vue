@@ -1,6 +1,6 @@
 <template>
     <button
-        class="baklava-toolbar-entry baklava-toolbar-button"
+        class="raflogn-toolbar-entry raflogn-toolbar-button"
         :disabled="!viewModel.commandHandler.canExecuteCommand(command)"
         :title="title"
         @click="viewModel.commandHandler.executeCommand(command)"

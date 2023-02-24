@@ -1,4 +1,4 @@
-.baklava-toolbar {
+.raflogn-toolbar {
     position: absolute;
     left: 0;
     top: 0;
@@ -6,32 +6,32 @@
     height: 60px;
     z-index: 3;
     padding: 0.5rem 2rem;
-    background: var(--baklava-toolbar-background);
-    color: var(--baklava-toolbar-foreground);
+    background: var(--raflogn-toolbar-background);
+    color: var(--raflogn-toolbar-foreground);
     display: flex;
     align-items: center;
 }
 
-.baklava-toolbar-entry {
+.raflogn-toolbar-entry {
     margin-left: 0.5rem;
     margin-right: 0.5rem;
 }
 
-.baklava-toolbar-button {
-    color: var(--baklava-toolbar-foreground);
+.raflogn-toolbar-button {
+    color: var(--raflogn-toolbar-foreground);
     background: none;
     border: none;
-    transition: color var(--baklava-visual-transition);
+    transition: color var(--raflogn-visual-transition);
 
     &:not([disabled]) {
         cursor: pointer;
     }
 
     &:hover:not([disabled]) {
-        color: var(--baklava-control-color-primary);
+        color: var(--raflogn-control-color-primary);
     }
 
     &[disabled] {
-        color: var(--baklava-control-color-disabled-foreground);
+        color: var(--raflogn-control-color-disabled-foreground);
     }
 }

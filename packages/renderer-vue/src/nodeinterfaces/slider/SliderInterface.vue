@@ -1,8 +1,8 @@
 <template>
     <div
         ref="el"
-        class="baklava-slider"
-        :class="{ 'baklava-ignore-mouse': !editMode }"
+        class="raflogn-slider"
+        :class="{ 'raflogn-ignore-mouse': !editMode }"
         @pointerdown="mousedown"
         @pointerup="mouseup"
         @pointermove="mousemove"
@@ -22,7 +22,7 @@
                 ref="inputEl"
                 v-model="tempValue"
                 type="number"
-                class="baklava-input"
+                class="raflogn-input"
                 :class="{ '--invalid': invalid }"
                 style="text-align: right"
                 @blur="leaveEditMode"

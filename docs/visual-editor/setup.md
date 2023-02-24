@@ -37,7 +37,7 @@ Now you can pass the view model to the editor component:
 
 ```vue
 <template>
-    <baklava-editor :view-model="baklava" />
+    <raflogn-editor :view-model="raflogn" />
 </template>
 
 <script lang="ts">
@@ -47,11 +47,11 @@ import "@raflogn/themes/syrup-dark.css";
 
 export default defineComponent({
     components: {
-        "baklava-editor": EditorComponent,
+        "raflogn-editor": EditorComponent,
     },
     setup() {
-        const baklava = useRaflogn();
-        return { baklava };
+        const raflogn = useRaflogn();
+        return { raflogn };
     },
 });
 </script>

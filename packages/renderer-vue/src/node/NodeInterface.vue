@@ -1,5 +1,5 @@
 <template>
-    <div :id="intf.id" ref="el" class="baklava-node-interface" :class="classes">
+    <div :id="intf.id" ref="el" class="raflogn-node-interface" :class="classes">
         <div v-if="intf.port" class="__port" @pointerover="startHover" @pointerout="endHover" />
         <component
             :is="intf.component"

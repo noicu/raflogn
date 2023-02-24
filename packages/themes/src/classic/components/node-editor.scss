@@ -1,4 +1,4 @@
-.baklava-editor {
+.raflogn-editor {
     width: 100%;
     height: 100%;
     position: relative;
@@ -9,11 +9,11 @@
     touch-action: none;
 
     .background {
-        background-color: var(--baklava-editor-background-pattern-default);
-        background-image: linear-gradient(var(--baklava-editor-background-pattern-black) 2px, transparent 2px),
-            linear-gradient(90deg, var(--baklava-editor-background-pattern-black) 2px, transparent 2px),
-            linear-gradient(var(--baklava-editor-background-pattern-line) 1px, transparent 1px),
-            linear-gradient(90deg, var(--baklava-editor-background-pattern-line) 1px, transparent 1px);
+        background-color: var(--raflogn-editor-background-pattern-default);
+        background-image: linear-gradient(var(--raflogn-editor-background-pattern-black) 2px, transparent 2px),
+            linear-gradient(90deg, var(--raflogn-editor-background-pattern-black) 2px, transparent 2px),
+            linear-gradient(var(--raflogn-editor-background-pattern-line) 1px, transparent 1px),
+            linear-gradient(90deg, var(--raflogn-editor-background-pattern-line) 1px, transparent 1px);
         background-repeat: repeat;
         width: 100%;
         height: 100%;
@@ -66,9 +66,9 @@
     }
 }
 
-.baklava-ignore-mouse * {
+.raflogn-ignore-mouse * {
     pointer-events: none !important;
 }
-.baklava-ignore-mouse .__port {
+.raflogn-ignore-mouse .__port {
     pointer-events: all !important;
 }

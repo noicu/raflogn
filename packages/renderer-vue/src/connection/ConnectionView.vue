@@ -1,5 +1,5 @@
 <template>
-    <path class="baklava-connection" :class="classes" :d="d" />
+    <path class="raflogn-connection" :class="classes" :d="d" />
 </template>
 
 <script lang="ts">

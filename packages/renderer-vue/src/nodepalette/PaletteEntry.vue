@@ -1,5 +1,5 @@
 <template>
-    <div class="baklava-node --palette" :data-node-type="type">
+    <div class="raflogn-node --palette" :data-node-type="type">
         <div class="__title">
             <div class="__title-label">
                 {{ title }}

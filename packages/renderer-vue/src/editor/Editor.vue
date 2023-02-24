@@ -2,9 +2,9 @@
     <div
         ref="el"
         tabindex="-1"
-        class="baklava-editor"
+        class="raflogn-editor"
         :class="{
-            'baklava-ignore-mouse': !!temporaryConnection || dragging,
+            'raflogn-ignore-mouse': !!temporaryConnection || dragging,
             '--temporary-connection': !!temporaryConnection,
         }"
         @pointermove.self="onPointerMove"

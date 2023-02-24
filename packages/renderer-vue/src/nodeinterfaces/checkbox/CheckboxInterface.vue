@@ -1,6 +1,6 @@
 <template>
     <div
-        class="baklava-checkbox"
+        class="raflogn-checkbox"
         :class="{ '--checked': intf.value }"
         :title="intf.name"
         @click="intf.value = !intf.value"

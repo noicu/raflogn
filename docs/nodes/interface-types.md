@@ -30,14 +30,14 @@ The constructor of the `NodeInterfaceType` class expects a name for the type. Th
 2. Create the `RaflognInterfaceTypes` instance
 
 ```js
-// In your App.vue or wherever you use the <baklava-editor>
+// In your App.vue or wherever you use the <raflogn-editor>
 import { RaflognInterfaceTypes, NodeInterfaceType } from "@raflogn/interface-types";
 import { stringType, numberType, booleanType } from "./interfaceTypes";
 
-const baklavaView = useRaflogn();
-const editor = baklavaView.editor;
+const raflognView = useRaflogn();
+const editor = raflognView.editor;
 
-const nodeInterfaceTypes = new RaflognInterfaceTypes(editor, { viewPlugin: baklavaView });
+const nodeInterfaceTypes = new RaflognInterfaceTypes(editor, { viewPlugin: raflognView });
 nodeInterfaceTypes.addTypes(stringType, numberType, booleanType);
 ```
 
@@ -109,15 +109,15 @@ This attribute can be used to style the interfaces using CSS.
 Here is an example of how to set the color of the ports depending on the interface type:
 
 ```css
-.baklava-node-interface[data-interface-type="string"] .__port {
+.raflogn-node-interface[data-interface-type="string"] .__port {
     background-color: green;
 }
 
-.baklava-node-interface[data-interface-type="number"] .__port {
+.raflogn-node-interface[data-interface-type="number"] .__port {
     background-color: red;
 }
 
-.baklava-node-interface[data-interface-type="boolean"] .__port {
+.raflogn-node-interface[data-interface-type="boolean"] .__port {
     background-color: purple;
 }
 ```

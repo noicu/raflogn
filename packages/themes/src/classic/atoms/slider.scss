@@ -1,7 +1,7 @@
-.baklava-slider {
-    background: var(--baklava-control-color-background);
-    color: var(--baklava-control-color-foreground);
-    border-radius: var(--baklava-control-border-radius);
+.raflogn-slider {
+    background: var(--raflogn-control-color-background);
+    color: var(--raflogn-control-color-foreground);
+    border-radius: var(--raflogn-control-border-radius);
     position: relative;
     cursor: pointer;
 
@@ -23,9 +23,9 @@
         }
 
         & > input {
-            background-color: var(--baklava-control-color-background);
-            color: var(--baklava-control-color-foreground);
-            caret-color: var(--baklava-control-color-primary);
+            background-color: var(--raflogn-control-color-background);
+            color: var(--raflogn-control-color-foreground);
+            caret-color: var(--raflogn-control-color-primary);
             padding: 0.35em;
             width: 100%;
         }
@@ -36,7 +36,7 @@
         top: 0;
         bottom: 0;
         left: 0;
-        background-color: var(--baklava-control-color-primary);
-        border-radius: var(--baklava-control-border-radius);
+        background-color: var(--raflogn-control-color-primary);
+        border-radius: var(--raflogn-control-border-radius);
     }
 }

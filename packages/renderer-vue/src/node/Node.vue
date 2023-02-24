@@ -2,7 +2,7 @@
     <div
         :id="node.id"
         ref="el"
-        class="baklava-node"
+        class="raflogn-node"
         :class="classes"
         :style="styles"
         :data-node-type="node.type"
@@ -29,7 +29,7 @@
                 ref="renameInputEl"
                 v-model="tempName"
                 type="text"
-                class="baklava-input"
+                class="raflogn-input"
                 placeholder="Node Name"
                 @blur="doneRenaming"
                 @keydown.enter="doneRenaming"
