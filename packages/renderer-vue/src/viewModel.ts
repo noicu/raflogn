@@ -1,6 +1,6 @@
 import { computed, reactive, ref, Ref, shallowReadonly, watch } from "vue";
 import { AbstractNode, Editor, Graph, GraphTemplate, NodeInterface } from "@raflogn/core";
-import { IBaklavaTapable, SequentialHook } from "@raflogn/events";
+import { IRaflognTapable, SequentialHook } from "@raflogn/events";
 
 import { ICommandHandler, useCommandHandler } from "./commands";
 import { IClipboard, useClipboard } from "./clipboard";
@@ -24,7 +24,7 @@ export interface IViewSettings {
     };
 }
 
-export interface IBaklavaViewModel extends IBaklavaTapable {
+export interface IRaflognViewModel extends IRaflognTapable {
     editor: Editor;
     displayedGraph: Graph;
     isSubgraph: Readonly<boolean>;
@@ -41,7 +41,7 @@ export interface IBaklavaViewModel extends IBaklavaTapable {
     switchGraph: (newGraph: Graph | GraphTemplate) => void;
 }
 
-export function useBaklava(existingEditor?: Editor): IBaklavaViewModel {
+export function useRaflogn(existingEditor?: Editor): IRaflognViewModel {
     const editor: Ref<Editor> = ref(existingEditor ?? new Editor()) as Ref<Editor>;
     const token = Symbol("ViewModelToken");
 
@@ -131,5 +131,5 @@ export function useBaklava(existingEditor?: Editor): IBaklavaViewModel {
         clipboard,
         hooks,
         switchGraph,
-    }) as IBaklavaViewModel;
+    }) as IRaflognViewModel;
 }

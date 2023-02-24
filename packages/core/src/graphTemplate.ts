@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { BaklavaEvent, SequentialHook } from "@raflogn/events";
+import { RaflognEvent, SequentialHook } from "@raflogn/events";
 import type { IConnectionState } from "./connection";
 import type { Editor } from "./editor";
 import { Graph, IGraphInterface, IGraphState } from "./graph";
@@ -54,8 +54,8 @@ export class GraphTemplate implements IGraphState {
     }
 
     public events = {
-        nameChanged: new BaklavaEvent<string, GraphTemplate>(this),
-        updated: new BaklavaEvent<void, GraphTemplate>(this),
+        nameChanged: new RaflognEvent<string, GraphTemplate>(this),
+        updated: new RaflognEvent<void, GraphTemplate>(this),
     };
 
     public hooks = {

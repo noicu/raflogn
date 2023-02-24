@@ -1,9 +1,9 @@
 import {
-    PreventableBaklavaEvent,
-    BaklavaEvent,
+    PreventableRaflognEvent,
+    RaflognEvent,
     SequentialHook,
-    IBaklavaEventEmitter,
-    IBaklavaTapable,
+    IRaflognEventEmitter,
+    IRaflognTapable,
     createProxy,
 } from "@raflogn/events";
 import type { Connection } from "./connection";
@@ -23,19 +23,19 @@ export interface INodeTypeInformation extends Required<IRegisterNodeTypeOptions>
 }
 
 /** Raflogn 的主要模型类 */
-export class Editor implements IBaklavaEventEmitter, IBaklavaTapable {
+export class Editor implements IRaflognEventEmitter, IRaflognTapable {
     public events = {
-        loaded: new BaklavaEvent<void, Editor>(this),
-        beforeRegisterNodeType: new PreventableBaklavaEvent<IAddNodeTypeEventData, Editor>(this),
-        registerNodeType: new BaklavaEvent<IAddNodeTypeEventData, Editor>(this),
-        beforeUnregisterNodeType: new PreventableBaklavaEvent<string, Editor>(this),
-        unregisterNodeType: new BaklavaEvent<string, Editor>(this),
-        beforeAddGraphTemplate: new PreventableBaklavaEvent<GraphTemplate, Editor>(this),
-        addGraphTemplate: new BaklavaEvent<GraphTemplate, Editor>(this),
-        beforeRemoveGraphTemplate: new PreventableBaklavaEvent<GraphTemplate, Editor>(this),
-        removeGraphTemplate: new BaklavaEvent<GraphTemplate, Editor>(this),
-        registerGraph: new BaklavaEvent<Graph, Editor>(this),
-        unregisterGraph: new BaklavaEvent<Graph, Editor>(this),
+        loaded: new RaflognEvent<void, Editor>(this),
+        beforeRegisterNodeType: new PreventableRaflognEvent<IAddNodeTypeEventData, Editor>(this),
+        registerNodeType: new RaflognEvent<IAddNodeTypeEventData, Editor>(this),
+        beforeUnregisterNodeType: new PreventableRaflognEvent<string, Editor>(this),
+        unregisterNodeType: new RaflognEvent<string, Editor>(this),
+        beforeAddGraphTemplate: new PreventableRaflognEvent<GraphTemplate, Editor>(this),
+        addGraphTemplate: new RaflognEvent<GraphTemplate, Editor>(this),
+        beforeRemoveGraphTemplate: new PreventableRaflognEvent<GraphTemplate, Editor>(this),
+        removeGraphTemplate: new RaflognEvent<GraphTemplate, Editor>(this),
+        registerGraph: new RaflognEvent<Graph, Editor>(this),
+        unregisterGraph: new RaflognEvent<Graph, Editor>(this),
     };
 
     public hooks = {

@@ -1,6 +1,6 @@
 {
   "name": "@raflogn/interface-types",
-  "version": "0.0.1-alpha.1",
+  "version": "0.0.1-alpha.4",
   "description": "Add types to node interfaces for Raflogn",
   "author": "noicu <1018496570@qq.com>",
   "homepage": "https://raflogn.no.icu",
@@ -26,9 +26,9 @@
     "url": "https://github.com/noicu/raflogn/issues"
   },
   "devDependencies": {
-    "@raflogn/core": "^0.0.1",
-    "@raflogn/engine": "^0.0.1",
-    "@raflogn/renderer-vue": "^0.0.1-alpha.1",
+    "@raflogn/core": "^0.0.1-alpha.4",
+    "@raflogn/engine": "^0.0.1-alpha.4",
+    "@raflogn/renderer-vue": "^0.0.1-alpha.4",
     "@ts-tools/node": "^3.0.1",
     "@types/chai": "^4.3.0",
     "@types/mocha": "^9.0.0",
@@ -39,5 +39,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "723bf8b6249e6b67d9a7a5a9c84cf1ee0ca33739"
+  "gitHead": ""
 }

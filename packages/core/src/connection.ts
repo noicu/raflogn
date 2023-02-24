@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { BaklavaEvent, IBaklavaEventEmitter } from "@raflogn/events";
+import { RaflognEvent, IRaflognEventEmitter } from "@raflogn/events";
 import type { NodeInterface } from "./nodeInterface";
 
 export interface IConnection {
@@ -17,7 +17,7 @@ export interface IConnectionState extends Record<string, any> {
     to: string;
 }
 
-export class Connection implements IConnection, IBaklavaEventEmitter {
+export class Connection implements IConnection, IRaflognEventEmitter {
     public id: string;
     public from: NodeInterface;
     public to: NodeInterface;
@@ -25,7 +25,7 @@ export class Connection implements IConnection, IBaklavaEventEmitter {
     public destructed = false;
 
     public events = {
-        destruct: new BaklavaEvent<void, Connection>(this),
+        destruct: new RaflognEvent<void, Connection>(this),
     };
 
     public constructor(from: NodeInterface, to: NodeInterface) {

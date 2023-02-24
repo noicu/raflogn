@@ -2,12 +2,12 @@ import { Subscribable } from "./subscribable";
 
 export type EventListener<T, E> = (data: T, entity: E) => any;
 
-export interface IBaklavaEventEmitter {
-    events: Record<string, BaklavaEvent<any, any>>;
+export interface IRaflognEventEmitter {
+    events: Record<string, RaflognEvent<any, any>>;
 }
 
 /** Main event class for Raflogn */
-export class BaklavaEvent<T, E> extends Subscribable<EventListener<T, E>> {
+export class RaflognEvent<T, E> extends Subscribable<EventListener<T, E>> {
     public constructor(protected readonly entity: E) {
         super();
     }
@@ -21,10 +21,10 @@ export class BaklavaEvent<T, E> extends Subscribable<EventListener<T, E>> {
     }
 }
 
-/** Extension for the [[BaklavaEvent]] class. A listener can return `false` to prevent
+/** Extension for the [[RaflognEvent]] class. A listener can return `false` to prevent
  * this event from happening.
  */
-export class PreventableBaklavaEvent<T, E> extends BaklavaEvent<T, E> {
+export class PreventableRaflognEvent<T, E> extends RaflognEvent<T, E> {
     /**
      * Invoke all listeners.
      * @param data The data to invoke all listeners with

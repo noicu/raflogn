@@ -1,10 +1,10 @@
 <template>
     <div id="app">
-        <baklava-editor :view-model="baklavaView">
+        <raflogn-editor :view-model="raflognView">
             <template #node="nodeProps">
                 <CustomNodeRenderer :key="nodeProps.node.id" v-bind="nodeProps" />
             </template>
-        </baklava-editor>
+        </raflogn-editor>
         <button @click="calculate">
             演算
         </button>
@@ -30,9 +30,9 @@
 import { defineComponent } from "vue";
 
 import { NodeInstanceOf } from "@raflogn/core";
-import { EditorComponent, SelectInterface, useBaklava, Commands } from "../src";
+import { EditorComponent, SelectInterface, useRaflogn, Commands } from "../src";
 import { DependencyEngine, applyResult } from "@raflogn/engine";
-import { BaklavaInterfaceTypes } from "@raflogn/interface-types";
+import { RaflognInterfaceTypes } from "@raflogn/interface-types";
 
 import CustomNodeRenderer from "./CustomNodeRenderer";
 
@@ -52,29 +52,37 @@ import { stringType, numberType, booleanType } from "./interfaceTypes";
 export default defineComponent({
     components: {
         CustomNodeRenderer,
-        "baklava-editor": EditorComponent,
+        "raflogn-editor": EditorComponent,
     },
     setup() {
         const token = Symbol("token");
-        const baklavaView = useBaklava();
-        const editor = baklavaView.editor;
+        const raflognView = useRaflogn();
+        const editor = raflognView.editor;
 
-        baklavaView.settings.enableMinimap = true;
+        raflognView.settings.enableMinimap = true;
 
         const engine = new DependencyEngine(editor);
+        
         engine.events.afterRun.subscribe(token, (r) => {
+            console.log("afterRun");
+            // 暂停引擎
             engine.pause();
+            // 将计算结果值应用到图中的输出接口
             applyResult(r, editor);
+            // 从暂停状态恢复引擎
             engine.resume();
+            // 打印计算结果
             for (const v of r.values()) {
                 console.log(v);
             }
         });
+        
         engine.hooks.gatherCalculationData.subscribe(token, () => "def");
+        // 
         engine.start();
 
-        const nodeInterfaceTypes = new BaklavaInterfaceTypes(editor, {
-            viewPlugin: baklavaView,
+        const nodeInterfaceTypes = new RaflognInterfaceTypes(editor, {
+            viewPlugin: raflognView,
             engine,
         });
         nodeInterfaceTypes.addTypes(stringType, numberType, booleanType);
@@ -90,11 +98,11 @@ export default defineComponent({
         editor.registerNodeType(SidebarNode);
         editor.registerNodeType(ArrayNode);
         
-        editor.graph.addNode(new TestNode());
-        editor.graph.addNode(new TestNode());
-        editor.graph.addNode(new TestNode());
-        editor.graph.addNode(new OutputNode());
-        editor.graph.addNode(new BuilderTestNode());
+        // editor.graph.addNode(new TestNode());
+        // editor.graph.addNode(new TestNode());
+        // editor.graph.addNode(new TestNode());
+        // editor.graph.addNode(new OutputNode());
+        // editor.graph.addNode(new BuilderTestNode());
         // editor.addNode(new AdvancedNode());
 
         const calculate = async () => {
@@ -126,14 +134,14 @@ export default defineComponent({
         };
 
         const changeGridSize = () => {
-            baklavaView.settings.background.gridSize = Math.round(Math.random() * 100) + 100;
+            raflognView.settings.background.gridSize = Math.round(Math.random() * 100) + 100;
         };
 
         const createSubgraph = () => {
-            baklavaView.commandHandler.executeCommand<Commands.CreateSubgraphCommand>(Commands.CREATE_SUBGRAPH_COMMAND);
+            raflognView.commandHandler.executeCommand<Commands.CreateSubgraphCommand>(Commands.CREATE_SUBGRAPH_COMMAND);
         };
 
-        return { baklavaView, calculate, save, load, setSelectItems, changeGridSize, createSubgraph };
+        return { raflognView, calculate, save, load, setSelectItems, changeGridSize, createSubgraph };
     },
 });
 </script>

@@ -2,7 +2,7 @@ import { Subscribable } from "./subscribable";
 
 export type HookTap<I, O, E> = (i: I, entity: E) => O;
 
-export interface IBaklavaTapable {
+export interface IRaflognTapable {
     hooks: Record<string, Subscribable<HookTap<any, any, any>>>;
 }
 

@@ -1,6 +1,6 @@
 {
     "name": "@raflogn/renderer-vue",
-    "version": "0.0.1-alpha.1",
+    "version": "0.0.1-alpha.4",
     "description": "Vue frontend for Raflogn",
     "author": "noicu <1018496570@qq.com>",
     "homepage": "https://raflogn.no.icu",
@@ -30,8 +30,8 @@
         "url": "https://github.com/noicu/raflogn/issues"
     },
     "devDependencies": {
-        "@raflogn/core": "^0.0.1",
-        "@raflogn/events": "^0.0.1",
+        "@raflogn/core": "^0.0.1-alpha.4",
+        "@raflogn/events": "^0.0.1-alpha.4",
         "@types/resize-observer-browser": "^0.1.6",
         "@vitejs/plugin-vue": "^2.0.1",
         "@vue/compiler-sfc": "^3.2.26",
@@ -48,5 +48,5 @@
     "publishConfig": {
         "access": "public"
     },
-    "gitHead": "723bf8b6249e6b67d9a7a5a9c84cf1ee0ca33739"
+    "gitHead": ""
 }

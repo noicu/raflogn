@@ -1,6 +1,6 @@
 {
     "name": "@raflogn/events",
-    "version": "0.0.1",
+    "version": "0.0.1-alpha.4",
     "description": "Implementation of the Raflogn event system. Mainly intended for internal use in the Raflogn ecosystem",
     "author": "noicu <1018496570@qq.com>",
     "homepage": "https://raflogn.no.icu",

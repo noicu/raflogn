@@ -3,7 +3,7 @@
  */
 
 import type { Editor, NodeInterface } from "@raflogn/core";
-import type { IBaklavaViewModel } from "@raflogn/renderer-vue";
+import type { IRaflognViewModel } from "@raflogn/renderer-vue";
 import type { BaseEngine } from "@raflogn/engine";
 
 export interface IConversion<I, O> {
@@ -11,8 +11,8 @@ export interface IConversion<I, O> {
     transformationFunction(value: I): O;
 }
 
-export interface BaklavaInterfaceTypesOptions {
-    viewPlugin?: IBaklavaViewModel;
+export interface RaflognInterfaceTypesOptions {
+    viewPlugin?: IRaflognViewModel;
     engine?: BaseEngine<any, any>;
 }
 
@@ -42,11 +42,11 @@ export const setType = <T>(intf: NodeInterface<T>, type: NodeInterfaceType<T>) =
     intf.type = type.name;
 };
 
-export class BaklavaInterfaceTypes {
+export class RaflognInterfaceTypes {
     private editor: Editor;
     private types: Map<string, NodeInterfaceType<any>> = new Map();
 
-    public constructor(editor: Editor, options?: BaklavaInterfaceTypesOptions) {
+    public constructor(editor: Editor, options?: RaflognInterfaceTypesOptions) {
         this.editor = editor;
 
         this.editor.graphEvents.checkConnection.subscribe(this, ({ from, to }) => {

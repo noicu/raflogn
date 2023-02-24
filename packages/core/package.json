@@ -1,6 +1,6 @@
 {
   "name": "@raflogn/core",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha.4",
   "description": "Core logic of Raflogn, a graph editor / node editor for the web",
   "author": "noicu <1018496570@qq.com>",
   "homepage": "https://raflogn.no.icu",
@@ -26,7 +26,7 @@
     "url": "https://github.com/noicu/raflogn/issues"
   },
   "dependencies": {
-    "@raflogn/events": "^0.0.1",
+    "@raflogn/events": "^0.0.1-alpha.4",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -46,5 +46,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "723bf8b6249e6b67d9a7a5a9c84cf1ee0ca33739"
+  "gitHead": ""
 }

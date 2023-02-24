@@ -9,7 +9,7 @@ export default defineConfig({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "BaklavaJSRendererVue",
+            name: "RaflognJSRendererVue",
             fileName: (format) => `renderer-vue.${format}.js`,
         },
         rollupOptions: {

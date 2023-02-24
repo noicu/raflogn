@@ -6,12 +6,12 @@ import * as RendererVue from "@raflogn/renderer-vue";
 import "@raflogn/renderer-vue/dist/styles.css";
 
 import { createApp, h } from "vue";
-function createBaklava(element: Element): RendererVue.IBaklavaViewModel {
-    let exportViewModel: RendererVue.IBaklavaViewModel;
+function createRaflogn(element: Element): RendererVue.IRaflognViewModel {
+    let exportViewModel: RendererVue.IRaflognViewModel;
 
     createApp({
         components: {
-            "baklava-editor": RendererVue.EditorComponent,
+            "raflogn-editor": RendererVue.EditorComponent,
         },
         setup() {
             const { viewModel } = RendererVue.useViewModel();
@@ -19,7 +19,7 @@ function createBaklava(element: Element): RendererVue.IBaklavaViewModel {
             return { viewModel };
         },
         render() {
-            return h("baklava-editor", {
+            return h("raflogn-editor", {
                 props: {
                     viewModel: this.viewModel,
                 },
@@ -30,4 +30,4 @@ function createBaklava(element: Element): RendererVue.IBaklavaViewModel {
     return exportViewModel;
 }
 
-export { Core, Engine, InterfaceTypes, RendererVue, createBaklava };
+export { Core, Engine, InterfaceTypes, RendererVue, createRaflogn };

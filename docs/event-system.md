@@ -10,8 +10,8 @@ The token can be any reference-type (for example and object, array, or `this` wh
 It is provided when adding an event listener and provided again when removing the listener.
 
 ```ts
-import { BaklavaEvent } from "@raflogn/events";
-const ev = new BaklavaEvent<string, null>(null);
+import { RaflognEvent } from "@raflogn/events";
+const ev = new RaflognEvent<string, null>(null);
 const token = Symbol();
 ev.subscribe(token, (data) => {
     console.log("Event triggered:", data);
@@ -33,9 +33,9 @@ This is done by returning `false` in a listener function.
 Most preventable events have the `before` prefix in their name.
 
 ```ts
-import { PreventableBaklavaEvent } from "@raflogn/events";
+import { PreventableRaflognEvent } from "@raflogn/events";
 
-const ev = new PreventableBaklavaEvent<string, null>(null);
+const ev = new PreventableRaflognEvent<string, null>(null);
 
 const token = Symbol();
 ev.subscribe(token, (data) => {

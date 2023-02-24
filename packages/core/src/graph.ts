@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 import {
-    BaklavaEvent,
+    RaflognEvent,
     createProxy,
-    IBaklavaEventEmitter,
-    IBaklavaTapable,
-    PreventableBaklavaEvent,
+    IRaflognEventEmitter,
+    IRaflognTapable,
+    PreventableRaflognEvent,
     SequentialHook,
 } from "@raflogn/events";
 import { Connection, DummyConnection, IConnection, IConnectionState } from "./connection";
@@ -28,7 +28,7 @@ export interface IGraphState {
     outputs: IGraphInterface[];
 }
 
-export class Graph implements IBaklavaEventEmitter, IBaklavaTapable {
+export class Graph implements IRaflognEventEmitter, IRaflognTapable {
     public id = uuidv4();
     public editor: Editor;
     public template?: GraphTemplate;
@@ -40,15 +40,15 @@ export class Graph implements IBaklavaEventEmitter, IBaklavaTapable {
     protected _connections: Connection[] = [];
 
     public events = {
-        beforeAddNode: new PreventableBaklavaEvent<AbstractNode, Graph>(this),
-        addNode: new BaklavaEvent<AbstractNode, Graph>(this),
-        beforeRemoveNode: new PreventableBaklavaEvent<AbstractNode, Graph>(this),
-        removeNode: new BaklavaEvent<AbstractNode, Graph>(this),
-        beforeAddConnection: new PreventableBaklavaEvent<IAddConnectionEventData, Graph>(this),
-        addConnection: new BaklavaEvent<IConnection, Graph>(this),
-        checkConnection: new PreventableBaklavaEvent<IAddConnectionEventData, Graph>(this),
-        beforeRemoveConnection: new PreventableBaklavaEvent<IConnection, Graph>(this),
-        removeConnection: new BaklavaEvent<IConnection, Graph>(this),
+        beforeAddNode: new PreventableRaflognEvent<AbstractNode, Graph>(this),
+        addNode: new RaflognEvent<AbstractNode, Graph>(this),
+        beforeRemoveNode: new PreventableRaflognEvent<AbstractNode, Graph>(this),
+        removeNode: new RaflognEvent<AbstractNode, Graph>(this),
+        beforeAddConnection: new PreventableRaflognEvent<IAddConnectionEventData, Graph>(this),
+        addConnection: new RaflognEvent<IConnection, Graph>(this),
+        checkConnection: new PreventableRaflognEvent<IAddConnectionEventData, Graph>(this),
+        beforeRemoveConnection: new PreventableRaflognEvent<IConnection, Graph>(this),
+        removeConnection: new RaflognEvent<IConnection, Graph>(this),
     };
 
     public hooks = {

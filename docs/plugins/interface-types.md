@@ -27,17 +27,17 @@ export const booleanType = new NodeInterfaceType("boolean");
 The constructor of the `NodeInterfaceType` class expects a name for the type. This name can be arbitrary and is used for [styling](#styling).
 :::
 
-2. Create the `BaklavaInterfaceTypes` instance
+2. Create the `RaflognInterfaceTypes` instance
 
 ```js
-// In your App.vue or wherever you use the <baklava-editor>
-import { BaklavaInterfaceTypes, NodeInterfaceType } from "@raflogn/interface-types";
+// In your App.vue or wherever you use the <raflogn-editor>
+import { RaflognInterfaceTypes, NodeInterfaceType } from "@raflogn/interface-types";
 import { stringType, numberType, booleanType } from "./interfaceTypes";
 
-const baklavaView = useBaklava();
-const editor = baklavaView.editor;
+const raflognView = useRaflogn();
+const editor = raflognView.editor;
 
-const nodeInterfaceTypes = new BaklavaInterfaceTypes(editor, { viewPlugin: baklavaView });
+const nodeInterfaceTypes = new RaflognInterfaceTypes(editor, { viewPlugin: raflognView });
 nodeInterfaceTypes.addTypes(stringType, numberType, booleanType);
 ```
 
@@ -109,22 +109,22 @@ This attribute can be used to style the interfaces using CSS.
 Here is an example of how to set the color of the ports depending on the interface type:
 
 ```css
-.baklava-node-interface[data-interface-type="string"] .__port {
+.raflogn-node-interface[data-interface-type="string"] .__port {
     background-color: green;
 }
 
-.baklava-node-interface[data-interface-type="number"] .__port {
+.raflogn-node-interface[data-interface-type="number"] .__port {
     background-color: red;
 }
 
-.baklava-node-interface[data-interface-type="boolean"] .__port {
+.raflogn-node-interface[data-interface-type="boolean"] .__port {
     background-color: purple;
 }
 ```
 
 ## Options
 
-The `BaklavaInterfaceTypes` can receive up to two arguments:
+The `RaflognInterfaceTypes` can receive up to two arguments:
 
 -   The editor instance (required)
 -   Configuration options (not required)
@@ -132,8 +132,8 @@ The `BaklavaInterfaceTypes` can receive up to two arguments:
 The configuration options have the following format:
 
 ```ts
-interface BaklavaInterfaceTypesOptions {
-    viewPlugin?: IBaklavaView;
+interface RaflognInterfaceTypesOptions {
+    viewPlugin?: IRaflognView;
     engine?: BaseEngine<any, any>;
 }
 ```
@@ -150,10 +150,10 @@ When using this plugin together with the Engine, make sure to provide the engine
 
 ## Backend Usage
 
-By default, the `BaklavaInterfaceTypes` constructor expects two arguments: the editor and the return value of the `useBaklava` function.
+By default, the `RaflognInterfaceTypes` constructor expects two arguments: the editor and the return value of the `useRaflogn` function.
 The second parameter, however, is optional and can be omitted.
 This is especially useful when running Raflogn in the backend and just needing the conversions.
 
 ```js
-new BaklavaInterfaceTypes(editor);
+new RaflognInterfaceTypes(editor);
 ```

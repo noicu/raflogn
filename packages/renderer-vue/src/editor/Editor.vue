@@ -2,9 +2,9 @@
     <div
         ref="el"
         tabindex="-1"
-        class="baklava-editor"
+        class="raflogn-editor"
         :class="{
-            'baklava-ignore-mouse': !!temporaryConnection || dragging,
+            'raflogn-ignore-mouse': !!temporaryConnection || dragging,
             '--temporary-connection': !!temporaryConnection,
         }"
         @pointermove.self="onPointerMove"
@@ -66,7 +66,7 @@
 import { computed, defineComponent, provide, Ref, ref, toRef } from "vue";
 
 import { AbstractNode } from "@raflogn/core";
-import { IBaklavaViewModel } from "../viewModel";
+import { IRaflognViewModel } from "../viewModel";
 import { usePanZoom } from "./panZoom";
 import { useTemporaryConnection } from "./temporaryConnection";
 
@@ -85,14 +85,14 @@ export default defineComponent({
     components: { Background, Node, ConnectionWrapper, TemporaryConnection, Sidebar, Minimap, NodePalette, Toolbar },
     props: {
         viewModel: {
-            type: Object as () => IBaklavaViewModel,
+            type: Object as () => IRaflognViewModel,
             required: true,
         },
     },
     setup(props) {
         const token = Symbol("EditorToken");
 
-        const viewModelRef = toRef(props, "viewModel") as unknown as Ref<IBaklavaViewModel>;
+        const viewModelRef = toRef(props, "viewModel") as unknown as Ref<IRaflognViewModel>;
         providePlugin(viewModelRef);
 
         const el = ref<HTMLElement | null>(null);

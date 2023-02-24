@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 import {
-    PreventableBaklavaEvent,
-    BaklavaEvent,
+    PreventableRaflognEvent,
+    RaflognEvent,
     SequentialHook,
-    IBaklavaEventEmitter,
-    IBaklavaTapable,
+    IRaflognEventEmitter,
+    IRaflognTapable,
 } from "@raflogn/events";
 import type { INodeUpdateEventData } from "./eventDataTypes";
 import type { Graph } from "./graph";
@@ -23,7 +23,7 @@ export interface INodeState<I, O> {
     outputs: NodeInterfaceDefinitionStates<O> & NodeInterfaceDefinitionStates<Record<string, NodeInterface<any>>>;
 }
 
-export abstract class AbstractNode implements IBaklavaEventEmitter, IBaklavaTapable {
+export abstract class AbstractNode implements IRaflognEventEmitter, IRaflognTapable {
     /** Type of the node */
     public abstract type: string;
     /** Customizable display name of the node. */
@@ -35,16 +35,16 @@ export abstract class AbstractNode implements IBaklavaEventEmitter, IBaklavaTapa
     public abstract outputs: Record<string, NodeInterface<any>>;
 
     public events = {
-        loaded: new BaklavaEvent<AbstractNode, AbstractNode>(this),
-        beforeAddInput: new PreventableBaklavaEvent<NodeInterface, AbstractNode>(this),
-        addInput: new BaklavaEvent<NodeInterface, AbstractNode>(this),
-        beforeRemoveInput: new PreventableBaklavaEvent<NodeInterface, AbstractNode>(this),
-        removeInput: new BaklavaEvent<NodeInterface, AbstractNode>(this),
-        beforeAddOutput: new PreventableBaklavaEvent<NodeInterface, AbstractNode>(this),
-        addOutput: new BaklavaEvent<NodeInterface, AbstractNode>(this),
-        beforeRemoveOutput: new PreventableBaklavaEvent<NodeInterface, AbstractNode>(this),
-        removeOutput: new BaklavaEvent<NodeInterface, AbstractNode>(this),
-        update: new BaklavaEvent<INodeUpdateEventData | null, AbstractNode>(this),
+        loaded: new RaflognEvent<AbstractNode, AbstractNode>(this),
+        beforeAddInput: new PreventableRaflognEvent<NodeInterface, AbstractNode>(this),
+        addInput: new RaflognEvent<NodeInterface, AbstractNode>(this),
+        beforeRemoveInput: new PreventableRaflognEvent<NodeInterface, AbstractNode>(this),
+        removeInput: new RaflognEvent<NodeInterface, AbstractNode>(this),
+        beforeAddOutput: new PreventableRaflognEvent<NodeInterface, AbstractNode>(this),
+        addOutput: new RaflognEvent<NodeInterface, AbstractNode>(this),
+        beforeRemoveOutput: new PreventableRaflognEvent<NodeInterface, AbstractNode>(this),
+        removeOutput: new RaflognEvent<NodeInterface, AbstractNode>(this),
+        update: new RaflognEvent<INodeUpdateEventData | null, AbstractNode>(this),
     };
 
     public hooks = {

@@ -1,10 +1,10 @@
 import { v4 as uuidv4 } from "uuid";
 import {
     SequentialHook,
-    BaklavaEvent,
-    PreventableBaklavaEvent,
-    IBaklavaEventEmitter,
-    IBaklavaTapable,
+    RaflognEvent,
+    PreventableRaflognEvent,
+    IRaflognEventEmitter,
+    IRaflognTapable,
 } from "@raflogn/events";
 
 export interface INodeInterfaceState<T> extends Record<string, any> {
@@ -15,7 +15,7 @@ export interface INodeInterfaceState<T> extends Record<string, any> {
 
 export type NodeInterfaceMiddleware<T, A extends Array<any>> = (intf: NodeInterface<T>, ...args: A) => void;
 
-export class NodeInterface<T = any> implements IBaklavaEventEmitter, IBaklavaTapable {
+export class NodeInterface<T = any> implements IRaflognEventEmitter, IRaflognTapable {
     public id = uuidv4();
 
     /**
@@ -40,10 +40,10 @@ export class NodeInterface<T = any> implements IBaklavaEventEmitter, IBaklavaTap
     public component?: any;
 
     public events = {
-        setConnectionCount: new BaklavaEvent<number, NodeInterface<T>>(this),
-        beforeSetValue: new PreventableBaklavaEvent<T, NodeInterface<T>>(this),
-        setValue: new BaklavaEvent<T, NodeInterface<T>>(this),
-        updated: new BaklavaEvent<void, NodeInterface<T>>(this),
+        setConnectionCount: new RaflognEvent<number, NodeInterface<T>>(this),
+        beforeSetValue: new PreventableRaflognEvent<T, NodeInterface<T>>(this),
+        setValue: new RaflognEvent<T, NodeInterface<T>>(this),
+        updated: new RaflognEvent<void, NodeInterface<T>>(this),
     };
 
     public hooks = {

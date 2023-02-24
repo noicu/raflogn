@@ -31,4 +31,4 @@ The core functionality is shipped in the `@raflogn/core` package. Any other func
 There is also the `raflogn` package, which contains the core package as well as all plugins.
 
 ## Getting Started & Documentation
-You can find the documentation here: https://v2.baklava.tech
+You can find the documentation here: https://v2.raflogn.tech

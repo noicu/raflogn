@@ -15,7 +15,7 @@ export default function getDomElements(ni: NodeInterface): IResolvedDomElements 
     const portDOM = interfaceDOM?.getElementsByClassName("__port");
 
     return {
-        node: interfaceDOM?.closest(".baklava-node") ?? null,
+        node: interfaceDOM?.closest(".raflogn-node") ?? null,
         interface: interfaceDOM,
         port: portDOM && portDOM.length > 0 ? (portDOM[0] as HTMLElement) : null,
     };

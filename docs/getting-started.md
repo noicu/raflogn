@@ -23,20 +23,20 @@ Now you can use Raflogn in your Vue application:
 
 ```vue
 <template>
-    <baklava-editor :plugin="baklava" />
+    <raflogn-editor :plugin="raflogn" />
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { EditorComponent, useBaklava } from "@raflogn/renderer-vue";
+import { EditorComponent, useRaflogn } from "@raflogn/renderer-vue";
 
 export default defineComponent({
     components: {
-        "baklava-editor": EditorComponent,
+        "raflogn-editor": EditorComponent,
     },
     setup() {
-        const baklava = useBaklava();
-        return { baklava };
+        const raflogn = useRaflogn();
+        return { raflogn };
     },
 });
 </script>
@@ -74,9 +74,9 @@ Now register the node type so the editor knows it exists:
 import MyNode from "./MyNode";
 
 // this code is from the setup function above
-const baklava = useBaklava();
-baklava.editor.registerNodeType(MyNode);
-return { baklava };
+const raflogn = useRaflogn();
+raflogn.editor.registerNodeType(MyNode);
+return { raflogn };
 ```
 
 That's it! You should now be able to create nodes and connect them.

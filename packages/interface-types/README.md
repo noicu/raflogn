@@ -5,7 +5,7 @@
 ## Usage
 
 ```
-const baklavajsCore = require('raflogn-core');
+const raflognjsCore = require('raflogn-core');
 
 // TODO: DEMONSTRATE API
 ```

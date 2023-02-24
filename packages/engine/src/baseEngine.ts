@@ -1,4 +1,4 @@
-import { BaklavaEvent, DynamicSequentialHook, PreventableBaklavaEvent, SequentialHook } from "@raflogn/events";
+import { RaflognEvent, DynamicSequentialHook, PreventableRaflognEvent, SequentialHook } from "@raflogn/events";
 import {
     AbstractNode,
     NodeInterface,
@@ -31,16 +31,20 @@ export enum EngineStatus {
 export abstract class BaseEngine<CalculationData, CalculationArgs extends Array<any>> {
     public events = {
         /**
-         * This event will be called before all the nodes `calculate` functions are called.
-         * The argument is the calculationData that the nodes will receive
+         * 该事件将在所有节点的“calculate”函数被调用之前被调用。
+         * 参数是节点将接收的 calculationData
          */
-        beforeRun: new PreventableBaklavaEvent<CalculationData, BaseEngine<CalculationData, CalculationArgs>>(this),
+        beforeRun: new PreventableRaflognEvent<CalculationData, BaseEngine<CalculationData, CalculationArgs>>(this),
         /**
-         * This event is called as soon as a run is completed.
-         * The argument is the result of the calculation.
+         * 运行完成后立即调用此事件。
+         * 参数是计算的结果。
          */
-        afterRun: new BaklavaEvent<CalculationResult, BaseEngine<CalculationData, CalculationArgs>>(this),
-        statusChange: new BaklavaEvent<EngineStatus, BaseEngine<CalculationData, CalculationArgs>>(this),
+        afterRun: new RaflognEvent<CalculationResult, BaseEngine<CalculationData, CalculationArgs>>(this),
+        /**
+         * 引擎状态改变时触发
+         * 参数是引擎的状态
+         */
+        statusChange: new RaflognEvent<EngineStatus, BaseEngine<CalculationData, CalculationArgs>>(this),
     };
 
     public hooks = {

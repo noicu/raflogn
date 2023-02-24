@@ -11,8 +11,7 @@ export class DependencyEngine<CalculationData = any> extends BaseEngine<Calculat
     public constructor(editor: Editor) {
         super(editor);
         this.editor.graphEvents.addConnection.subscribe(this.token, (c, graph) => {
-            // Delete all other connections to the target interface
-            // if only one connection to the input interface is allowed
+            // 如果输入接口只允许一个连接，则删除所有其他连接
             if (!c.to.allowMultipleConnections) {
                 graph.connections
                     .filter((conn) => conn.from !== c.from && conn.to === c.to)
@@ -27,17 +26,19 @@ export class DependencyEngine<CalculationData = any> extends BaseEngine<Calculat
         void this.calculateWithoutData();
     }
 
+    /**
+     * 执行计算
+     */
     protected override async execute(calculationData: CalculationData): Promise<CalculationResult> {
         if (!this.order) {
-            throw new Error("runCalculation called without order being calculated before");
+            throw new Error("调用 runCalculation 之前没有计算顺序");
         }
 
         const { calculationOrder, connectionsFromNode } = this.order;
 
-        // gather all values of the unconnected inputs
-        // maps NodeInterface.id -> value
-        // the reason it is done here and not during calculation is that this
-        // way we prevent race conditions because calculations can be async
+        // 收集未连接输入的所有值
+        // 映射 NodeInterface.id -> 值
+        // 在这里而不是在计算期间完成的原因是这样我们可以防止竞争条件，因为计算可以是异步的
         const inputValues = new Map<string, any>();
         for (const n of calculationOrder) {
             Object.values(n.inputs).forEach((ni) => {
@@ -58,7 +59,7 @@ export class DependencyEngine<CalculationData = any> extends BaseEngine<Calculat
                 if (!inputValues.has(v.id)) {
                     throw new Error(
                         `Could not find value for interface ${v.id}\n` +
-                            "This is likely a Raflogn internal issue. Please report it on GitHub.",
+                        "This is likely a Raflogn internal issue. Please report it on GitHub.",
                     );
                 }
                 inputsForNode[k] = inputValues.get(v.id);
@@ -76,7 +77,7 @@ export class DependencyEngine<CalculationData = any> extends BaseEngine<Calculat
                     if (!intfKey) {
                         throw new Error(
                             `Could not find key for interface ${c.from.id}\n` +
-                                "This is likely a Raflogn internal issue. Please report it on GitHub.",
+                            "This is likely a Raflogn internal issue. Please report it on GitHub.",
                         );
                     }
                     const v = this.hooks.transferData.execute(r[intfKey], c);

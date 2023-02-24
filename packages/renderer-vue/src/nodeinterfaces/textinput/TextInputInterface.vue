@@ -1,6 +1,6 @@
 <template>
     <div>
-        <input v-model="v" type="text" class="baklava-input" :placeholder="intf.name" :title="intf.name">
+        <input v-model="v" type="text" class="raflogn-input" :placeholder="intf.name" :title="intf.name">
     </div>
 </template>
 
