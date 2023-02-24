@@ -1,5 +1,5 @@
 <template>
-    <connection-view :x1="d.x1" :y1="d.y1" :x2="d.x2" :y2="d.y2" :state="state" />
+    <connection-view ref="connectionDom" :x1="d.x1" :y1="d.y1" :x2="d.x2" :y2="d.y2" :state="state" />
 </template>
 
 <script lang="ts">
@@ -21,6 +21,7 @@ export default defineComponent({
         },
     },
     setup(props) {
+        const connectionDom = ref<InstanceType<typeof ConnectionView>>();
         const { graph } = useGraph();
 
         let resizeObserver: ResizeObserver;
@@ -53,6 +54,15 @@ export default defineComponent({
         const updateCoords = () => {
             const from = resolveDom(props.connection.from);
             const to = resolveDom(props.connection.to);
+
+            // 从接口Dom中获取接口类型
+            const fromIT = from.interface?.attributes.getNamedItem('data-interface-type')?.value
+            const toIT = to.interface?.attributes.getNamedItem('data-interface-type')?.value
+
+            // 把接口类型写入线条的属性中，方便后续使用
+            if(fromIT) connectionDom.value?.$el.setAttribute('data-from-interface-type', fromIT);
+            if(toIT) connectionDom.value?.$el.setAttribute('data-to-interface-type', toIT);
+
             if (from.node && to.node) {
                 if (!resizeObserver) {
                     resizeObserver = new ResizeObserver(() => {
@@ -70,6 +80,7 @@ export default defineComponent({
         onMounted(async () => {
             await nextTick();
             updateCoords();
+            console.log("mounted", props);
         });
 
         onBeforeUnmount(() => {
@@ -80,7 +91,7 @@ export default defineComponent({
 
         watch([fromNodePosition, toNodePosition], () => updateCoords(), { deep: true });
 
-        return { d, state };
+        return { d, state ,connectionDom};
     },
 });
 </script>

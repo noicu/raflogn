@@ -37,3 +37,31 @@
 .raflogn-node-interface[data-interface-type="object"] .__port::before {
     background-color: purple;
 }
+
+
+
+
+
+
+
+
+
+.raflogn-connection[data-from-interface-type="string"] {
+    stroke: #ff7900;
+}
+
+.raflogn-connection[data-from-interface-type="number"] {
+    stroke: #4caf50;
+}
+
+.raflogn-connection[data-from-interface-type="boolean"] {
+    stroke: #e91e63;
+}
+
+.raflogn-connection[data-from-interface-type="string"] {
+    stroke: #ff7900;
+}
+
+.raflogn-connection[data-from-interface-type="string"] {
+    stroke: #ff7900;
+}
