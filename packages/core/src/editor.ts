@@ -22,7 +22,7 @@ export interface INodeTypeInformation extends Required<IRegisterNodeTypeOptions>
     type: AbstractNodeConstructor;
 }
 
-/** Raflogn 的主要模型类 */
+/** The main model class for RaflognJS */
 export class Editor implements IRaflognEventEmitter, IRaflognTapable {
     public events = {
         loaded: new RaflognEvent<void, Editor>(this),
@@ -36,12 +36,12 @@ export class Editor implements IRaflognEventEmitter, IRaflognTapable {
         removeGraphTemplate: new RaflognEvent<GraphTemplate, Editor>(this),
         registerGraph: new RaflognEvent<Graph, Editor>(this),
         unregisterGraph: new RaflognEvent<Graph, Editor>(this),
-    };
+    } as const;
 
     public hooks = {
         save: new SequentialHook<IEditorState, Editor>(this),
         load: new SequentialHook<IEditorState, Editor>(this),
-    };
+    } as const;
 
     public graphTemplateEvents = createProxy<GraphTemplate["events"]>();
     public graphTemplateHooks = createProxy<GraphTemplate["hooks"]>();
@@ -55,8 +55,9 @@ export class Editor implements IRaflognEventEmitter, IRaflognTapable {
     private _nodeTypes: Map<string, INodeTypeInformation> = new Map();
     private _graph = new Graph(this);
     private _graphTemplates: GraphTemplate[] = [];
+    private _loading = false;
 
-    /** 所有已注册节点类型的列表 */
+    /** List of all registered node types */
     public get nodeTypes(): ReadonlyMap<string, INodeTypeInformation> {
         return this._nodeTypes;
     }
@@ -66,23 +67,28 @@ export class Editor implements IRaflognEventEmitter, IRaflognTapable {
         return this._graph;
     }
 
-    /** 所有已注册图形模板（子图）的列表 */
+    /** List of all registered graph templates (subgraphs) */
     public get graphTemplates(): ReadonlyArray<GraphTemplate> {
         return this._graphTemplates;
     }
 
-    /** 编辑器中所有图形的集合，包括子图 */
+    /** Set of all graphs in the editor, including subgraphs */
     public get graphs(): ReadonlySet<Graph> {
         return this._graphs;
     }
 
+    /** Whether the editor is currently in the process of loading a saved graph */
+    public get loading() {
+        return this._loading;
+    }
+
     /**
-     * 注册一个新的节点类型
-     * @param type 节点的实际类型/构造函数
-     * @param options 可选择为此节点指定标题和/或类别
+     * Register a new node type
+     * @param type Actual type / constructor of the node
+     * @param options Optionally specify a title and/or a category for this node
      */
     public registerNodeType(type: AbstractNodeConstructor, options?: IRegisterNodeTypeOptions): void {
-        if (this.events.beforeRegisterNodeType.emit({ type, options })) {
+        if (this.events.beforeRegisterNodeType.emit({ type, options }).prevented) {
             return;
         }
         const nodeInstance = new type();
@@ -101,25 +107,16 @@ export class Editor implements IRaflognEventEmitter, IRaflognTapable {
     public unregisterNodeType(type: AbstractNodeConstructor | string): void {
         const stringType = typeof type === "string" ? type : new type().type;
         if (this.nodeTypes.has(stringType)) {
-            if (this.events.beforeUnregisterNodeType.emit(stringType)) {
+            if (this.events.beforeUnregisterNodeType.emit(stringType).prevented) {
                 return;
             }
-
-            // remove all nodes of this type in all graphs
-            for (const g of [this.graph, ...this.graphs.values()]) {
-                const nodesToRemove = g.nodes.filter((n) => n.type === stringType);
-                for (const n of nodesToRemove) {
-                    g.removeNode(n);
-                }
-            }
-
             this._nodeTypes.delete(stringType);
             this.events.unregisterNodeType.emit(stringType);
         }
     }
 
     public addGraphTemplate(template: GraphTemplate): void {
-        if (this.events.beforeAddGraphTemplate.emit(template)) {
+        if (this.events.beforeAddGraphTemplate.emit(template).prevented) {
             return;
         }
         this._graphTemplates.push(template);
@@ -134,11 +131,20 @@ export class Editor implements IRaflognEventEmitter, IRaflognTapable {
 
     public removeGraphTemplate(template: GraphTemplate): void {
         if (this.graphTemplates.includes(template)) {
-            if (this.events.beforeRemoveGraphTemplate.emit(template)) {
+            if (this.events.beforeRemoveGraphTemplate.emit(template).prevented) {
                 return;
             }
 
-            this.unregisterNodeType(getGraphNodeTypeString(template));
+            // remove all nodes of this type in all graphs
+            const graphNodeType = getGraphNodeTypeString(template);
+            for (const g of [this.graph, ...this.graphs.values()]) {
+                const nodesToRemove = g.nodes.filter((n) => n.type === graphNodeType);
+                for (const n of nodesToRemove) {
+                    g.removeNode(n);
+                }
+            }
+
+            this.unregisterNodeType(graphNodeType);
 
             this._graphTemplates.splice(this._graphTemplates.indexOf(template), 1);
             this.graphTemplateEvents.removeTarget(template.events);
@@ -172,18 +178,27 @@ export class Editor implements IRaflognEventEmitter, IRaflognTapable {
     /**
      * Load a state
      * @param state State to load
+     * @returns An array of warnings that occured during loading. If the array is empty, the state was successfully loaded.
      */
-    public load(state: IEditorState): void {
-        state = this.hooks.load.execute(state);
+    public load(state: IEditorState): string[] {
+        try {
+            this._loading = true;
+            state = this.hooks.load.execute(state);
 
-        state.graphTemplates.forEach((tState) => {
-            const template = new GraphTemplate(tState, this);
-            this.addGraphTemplate(template);
-        });
+            state.graphTemplates.forEach((tState) => {
+                const template = new GraphTemplate(tState, this);
+                this.addGraphTemplate(template);
+            });
 
-        this._graph.load(state.graph);
+            const warnings = this._graph.load(state.graph);
 
-        this.events.loaded.emit();
+            this.events.loaded.emit();
+
+            warnings.forEach((w) => console.warn(w));
+            return warnings;
+        } finally {
+            this._loading = false;
+        }
     }
 
     /**

@@ -1,9 +1,9 @@
 {
     "name": "@raflogn/themes",
-    "version": "0.0.1-alpha.4",
-    "description": "Themes for Wiring",
-    "author": "noicu <1018496570@qq.com>",
-    "homepage": "https://raflogn.no.icu",
+    "version": "2.0.2-beta.3",
+    "description": "Themes for RaflognJS",
+    "author": "noicu <office@no.icu>",
+    "homepage": "https://noicu.github.io/raflogn",
     "license": "MIT",
     "files": [
         "dist/**/*"
@@ -22,9 +22,9 @@
         "@types/rimraf": "^3.0.2",
         "@types/sass": "^1.43.1",
         "rimraf": "^3.0.2",
-        "sass": "^1.45.2",
-        "ts-node": "^10.4.0",
-        "typescript": "^4.5.4"
+        "sass": "^1.57.1",
+        "ts-node": "^10.9.1",
+        "typescript": "^4.9.4"
     },
     "publishConfig": {
         "access": "public"

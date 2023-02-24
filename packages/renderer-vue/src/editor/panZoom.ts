@@ -30,13 +30,11 @@ export function usePanZoom() {
     };
 
     const onMouseWheel = (ev: WheelEvent) => {
-        
         ev.preventDefault();
         let scrollAmount = ev.deltaY;
         if (ev.deltaMode === 1) {
-            scrollAmount *= 32; // Firefox 修复，乘数是试错法
+            scrollAmount *= 32; // Firefox fix, multiplier is trial & error
         }
-        
         const newScale = graph.value.scaling * (1 - scrollAmount / 1300);
         applyZoom(ev.offsetX, ev.offsetY, newScale);
     };

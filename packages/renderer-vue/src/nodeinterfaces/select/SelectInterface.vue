@@ -1,5 +1,5 @@
 <template>
-    <div ref="el" class="raflogn-select" :class="{ '--open': open }" :title="intf.name" @click="open = !open">
+    <div ref="el" class="baklava-select" :class="{ '--open': open }" :title="intf.name" @click="open = !open">
         <div class="__selected">
             <div class="__text">
                 {{ selectedText }}

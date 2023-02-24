@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from "uuid";
 import { defineNode, NodeInstanceOf, NodeInterface } from "@raflogn/core";
 import { TextInputInterface } from "../nodeinterfaces";
 
-export const SUBGRAPH_INPUT_NODE_TYPE = "__raflogn_SubgraphInputNode";
-export const SUBGRAPH_OUTPUT_NODE_TYPE = "__raflogn_SubgraphOutputNode";
+export const SUBGRAPH_INPUT_NODE_TYPE = "__baklava_SubgraphInputNode";
+export const SUBGRAPH_OUTPUT_NODE_TYPE = "__baklava_SubgraphOutputNode";
 
 export interface ISubgraphInterfaceNode {
     graphInterfaceId: string;

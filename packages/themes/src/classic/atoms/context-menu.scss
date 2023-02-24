@@ -1,11 +1,11 @@
-.raflogn-context-menu {
-    color: var(--raflogn-control-color-foreground);
+.baklava-context-menu {
+    color: var(--baklava-control-color-foreground);
     position: absolute;
     display: inline-block;
     z-index: 100;
-    background-color: var(--raflogn-context-menu-background);
-    box-shadow: var(--raflogn-context-menu-shadow);
-    border-radius: 0 0 var(--raflogn-control-border-radius) var(--raflogn-control-border-radius);
+    background-color: var(--baklava-context-menu-background);
+    box-shadow: var(--baklava-context-menu-shadow);
+    border-radius: 0 0 var(--baklava-control-border-radius) var(--baklava-control-border-radius);
     min-width: 6rem;
     width: max-content;
 
@@ -25,17 +25,17 @@
         }
 
         &.--disabled {
-            color: var(--raflogn-control-color-hover);
+            color: var(--baklava-control-color-hover);
         }
 
         &:not(.--header):not(.--active):not(.--disabled) {
             &:hover {
-                background: var(--raflogn-control-color-primary);
+                background: var(--baklava-control-color-primary);
             }
         }
 
         &.--active {
-            background: var(--raflogn-control-color-primary);
+            background: var(--baklava-control-color-primary);
         }
     }
 
@@ -57,6 +57,6 @@
     & > .divider {
         margin: 0.35em 0;
         height: 1px;
-        background-color: var(--raflogn-control-color-hover);
+        background-color: var(--baklava-control-color-hover);
     }
 }

@@ -11,9 +11,17 @@ import type { Graph } from "./graph";
 import type { NodeInterfaceDefinition, NodeInterface, NodeInterfaceDefinitionStates } from "./nodeInterface";
 import { mapValues } from "./utils";
 
+export interface CalculationContext<G = any, E = any> {
+    globalValues: G;
+    engine: E;
+}
+
 export type CalculateFunctionReturnType<O> = O | Promise<O> | void;
 
-export type CalculateFunction<I, O> = (inputs: I, globalValues?: any) => CalculateFunctionReturnType<O>;
+export type CalculateFunction<I, O, C extends CalculationContext = CalculationContext> = (
+    inputs: I,
+    context: C,
+) => CalculateFunctionReturnType<O>;
 
 export interface INodeState<I, O> {
     type: string;
@@ -25,7 +33,7 @@ export interface INodeState<I, O> {
 
 export abstract class AbstractNode implements IRaflognEventEmitter, IRaflognTapable {
     /** Type of the node */
-    public abstract type: string;
+    public abstract readonly type: string;
     /** Customizable display name of the node. */
     public abstract title: string;
     /** Unique identifier of the node */
@@ -45,16 +53,24 @@ export abstract class AbstractNode implements IRaflognEventEmitter, IRaflognTapa
         beforeRemoveOutput: new PreventableRaflognEvent<NodeInterface, AbstractNode>(this),
         removeOutput: new RaflognEvent<NodeInterface, AbstractNode>(this),
         update: new RaflognEvent<INodeUpdateEventData | null, AbstractNode>(this),
-    };
+    } as const;
 
     public hooks = {
         beforeLoad: new SequentialHook<INodeState<any, any>, AbstractNode>(this),
         afterSave: new SequentialHook<INodeState<any, any>, AbstractNode>(this),
-    };
+    } as const;
 
     protected graphInstance?: Graph;
 
     public abstract calculate?: CalculateFunction<any, any>;
+
+    /**
+     * The graph instance the node is placed in.
+     * `undefined` if the node hasn't been placed in a graph yet.
+     */
+    public get graph() {
+        return this.graphInstance;
+    }
 
     /**
      * Add an input interface to the node
@@ -107,11 +123,13 @@ export abstract class AbstractNode implements IRaflognEventEmitter, IRaflognTapa
         Object.entries(state.inputs).forEach(([k, v]) => {
             if (this.inputs[k]) {
                 this.inputs[k].load(v);
+                this.inputs[k].nodeId = this.id;
             }
         });
         Object.entries(state.outputs).forEach(([k, v]) => {
             if (this.outputs[k]) {
                 this.outputs[k].load(v);
+                this.outputs[k].nodeId = this.id;
             }
         });
         this.events.loaded.emit(this as any);
@@ -150,6 +168,7 @@ export abstract class AbstractNode implements IRaflognEventEmitter, IRaflognTapa
 
     private initializeIntf(type: "input" | "output", key: string, intf: NodeInterface) {
         intf.isInput = type === "input";
+        intf.nodeId = this.id;
         intf.events.setValue.subscribe(this, () => this.events.update.emit({ type, name: key, intf }));
     }
 
@@ -157,7 +176,7 @@ export abstract class AbstractNode implements IRaflognEventEmitter, IRaflognTapa
         const beforeEvent = type === "input" ? this.events.beforeAddInput : this.events.beforeAddOutput;
         const afterEvent = type === "input" ? this.events.addInput : this.events.addOutput;
         const ioObject = type === "input" ? this.inputs : this.outputs;
-        if (beforeEvent.emit(intf)) {
+        if (beforeEvent.emit(intf).prevented) {
             return false;
         }
         ioObject[key] = intf;
@@ -170,7 +189,7 @@ export abstract class AbstractNode implements IRaflognEventEmitter, IRaflognTapa
         const beforeEvent = type === "input" ? this.events.beforeRemoveInput : this.events.beforeRemoveOutput;
         const afterEvent = type === "input" ? this.events.removeInput : this.events.removeOutput;
         const io = type === "input" ? this.inputs[key] : this.outputs[key];
-        if (!io || beforeEvent.emit(io)) {
+        if (!io || beforeEvent.emit(io).prevented) {
             return false;
         }
 
@@ -203,8 +222,8 @@ export abstract class AbstractNode implements IRaflognEventEmitter, IRaflognTapa
  * Abstract base class for every node
  */
 export abstract class Node<I, O> extends AbstractNode {
-    public abstract inputs: NodeInterfaceDefinition<I> & Record<string, NodeInterface<any>>;
-    public abstract outputs: NodeInterfaceDefinition<O> & Record<string, NodeInterface<any>>;
+    public abstract inputs: NodeInterfaceDefinition<I>;
+    public abstract outputs: NodeInterfaceDefinition<O>;
 
     public load(state: INodeState<I, O>): void {
         super.load(state);

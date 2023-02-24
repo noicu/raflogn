@@ -1,9 +1,9 @@
 {
     "name": "@raflogn/events",
-    "version": "0.0.1-alpha.4",
+    "version": "2.0.2-beta.3",
     "description": "Implementation of the Raflogn event system. Mainly intended for internal use in the Raflogn ecosystem",
-    "author": "noicu <1018496570@qq.com>",
-    "homepage": "https://raflogn.no.icu",
+    "author": "noicu <office@no.icu>",
+    "homepage": "https://github.com/noicu/raflogn#readme",
     "license": "MIT",
     "files": [
         "dist/**/*"
@@ -28,6 +28,6 @@
         "url": "https://github.com/noicu/raflogn/issues"
     },
     "devDependencies": {
-        "typescript": "^4.5.4"
+        "typescript": "^4.9.4"
     }
 }

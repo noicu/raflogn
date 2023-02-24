@@ -15,24 +15,37 @@ export interface IGraphTemplateState extends IGraphState {
 }
 
 export class GraphTemplate implements IGraphState {
+    /** Create a new GraphTemplate from the nodes and connections inside the graph instance */
     public static fromGraph(graph: Graph, editor: Editor): GraphTemplate {
         return new GraphTemplate(graph.save(), editor);
     }
 
+    /** Graph template id */
     public id = uuidv4();
+
+    /** List of all node states in this graph template */
     public nodes!: Array<INodeState<unknown, unknown>>;
+
+    /** List of all connection states in this graph template */
     public connections!: IConnectionState[];
+
+    /** List of all inputs to the graph template */
     public inputs!: IGraphInterface[];
+
+    /** List of all outputs of the graph template */
     public outputs!: IGraphInterface[];
 
+    /** Editor instance */
     public editor: Editor;
 
     private _name = "Subgraph";
 
+    /** Get the name of the graph template */
     public get name() {
         return this._name;
     }
 
+    /** Set the name of the graph template */
     public set name(v: string) {
         this._name = v;
         this.events.nameChanged.emit(v);
@@ -56,13 +69,14 @@ export class GraphTemplate implements IGraphState {
     public events = {
         nameChanged: new RaflognEvent<string, GraphTemplate>(this),
         updated: new RaflognEvent<void, GraphTemplate>(this),
-    };
+    } as const;
 
     public hooks = {
         beforeLoad: new SequentialHook<IGraphTemplateState, GraphTemplate>(this),
         afterSave: new SequentialHook<IGraphTemplateState, GraphTemplate>(this),
-    };
+    } as const;
 
+    /** Update the state of the graph template with the provided state */
     public update(state: Omit<IGraphState, "id">) {
         this.nodes = state.nodes;
         this.connections = state.connections;
@@ -82,6 +96,10 @@ export class GraphTemplate implements IGraphState {
         };
     }
 
+    /** 
+     * Create a new graph instance from this template
+     * or load the state into the provided graph instance.
+     */
     public createGraph(graph?: Graph): Graph {
         const idMap = new Map<string, string>();
 

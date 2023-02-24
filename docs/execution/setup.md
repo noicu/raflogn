@@ -1,12 +1,12 @@
 # Graph Execution
 
-Raflogn not only offers a way to edit compute graphs but also to execute them.
+RaflognJS not only offers a way to edit compute graphs but also to execute them.
 This is done by _engines_. There are different types of engines which execute the graph in different ways.
 
 -   [Dependency Engine](./dependency)
 -   [Forward Engine](./forward)
 
-::: info
+::: tip
 If you want the behavior of Raflogn V1's engine, use the dependency engine.
 :::
 
@@ -100,9 +100,9 @@ You can now use the global data in the `calculate` function of your nodes:
 ```ts
 export default defineNode({
     // ...
-    calculate(inputs, global) {
+    calculate(inputs, { globalValues }) {
         return {
-            result: inputs.number1 + inputs.number2 + global.offset,
+            result: inputs.number1 + inputs.number2 + globalValues.offset,
         };
     },
 });

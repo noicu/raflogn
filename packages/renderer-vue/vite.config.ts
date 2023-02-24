@@ -4,6 +4,7 @@ import * as path from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { visualizer } from "rollup-plugin-visualizer";
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
     build: {
@@ -11,18 +12,21 @@ export default defineConfig({
             entry: path.resolve(__dirname, "src/index.ts"),
             name: "RaflognJSRendererVue",
             fileName: (format) => `renderer-vue.${format}.js`,
+            formats: ["umd", "es"],
         },
         rollupOptions: {
-            external: ["vue"],
+            external: ["vue", "@raflogn/core", "@raflogn/events"],
             output: {
                 globals: {
                     vue: "Vue",
                 },
             },
         },
+        minify: false,
     },
     plugins: [
         vue(),
+        dts(),
         visualizer({
             filename: "dist/report.html",
         }),

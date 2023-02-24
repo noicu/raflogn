@@ -21,12 +21,11 @@ export class Connection implements IConnection, IRaflognEventEmitter {
     public id: string;
     public from: NodeInterface;
     public to: NodeInterface;
-    public isInDanger = false;
     public destructed = false;
 
     public events = {
         destruct: new RaflognEvent<void, Connection>(this),
-    };
+    } as const;
 
     public constructor(from: NodeInterface, to: NodeInterface) {
         if (!from || !to) {
@@ -55,10 +54,10 @@ export class Connection implements IConnection, IRaflognEventEmitter {
  */
 export class DummyConnection implements IConnection {
     public id: string;
-    public from: NodeInterface<unknown>;
-    public to: NodeInterface<unknown>;
+    public from: NodeInterface;
+    public to: NodeInterface;
 
-    public constructor(from: NodeInterface<unknown>, to: NodeInterface<unknown>) {
+    public constructor(from: NodeInterface, to: NodeInterface) {
         if (!from || !to) {
             throw new Error("Cannot initialize connection with null/undefined for 'from' or 'to' values");
         }

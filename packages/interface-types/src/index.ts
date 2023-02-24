@@ -49,13 +49,13 @@ export class RaflognInterfaceTypes {
     public constructor(editor: Editor, options?: RaflognInterfaceTypesOptions) {
         this.editor = editor;
 
-        this.editor.graphEvents.checkConnection.subscribe(this, ({ from, to }) => {
-            const fromType = (from as any).type;
-            const toType = (to as any).type;
+        this.editor.graphEvents.checkConnection.subscribe(this, ({ from, to }, prevent) => {
+            const fromType = from.type;
+            const toType = to.type;
             if (!fromType || !toType) {
                 return;
             } else if (!this.canConvert(fromType, toType)) {
-                return false;
+                return prevent();
             }
         });
 
@@ -82,7 +82,7 @@ export class RaflognInterfaceTypes {
 
     /**
      * Add a new node interface type
-     * @param {...*} types The types to add
+     * @param types The types to add
      */
     public addTypes(...types: Array<NodeInterfaceType<unknown>>): this {
         types.forEach((t) => {

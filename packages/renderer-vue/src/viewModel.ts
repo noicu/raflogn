@@ -26,7 +26,9 @@ export interface IViewSettings {
 
 export interface IRaflognViewModel extends IRaflognTapable {
     editor: Editor;
+    /** Currently displayed graph */
     displayedGraph: Graph;
+    /** True if the currently displayed graph is a subgraph, false if it is the root graph */
     isSubgraph: Readonly<boolean>;
     settings: IViewSettings;
     commandHandler: ICommandHandler;
@@ -46,7 +48,7 @@ export function useRaflogn(existingEditor?: Editor): IRaflognViewModel {
     const token = Symbol("ViewModelToken");
 
     const _displayedGraph = ref(null as any) as Ref<Graph>;
-    const displayedGraph = shallowReadonly(_displayedGraph) as Readonly<Ref<Graph>>;
+    const displayedGraph = shallowReadonly(_displayedGraph);
     const { switchGraph } = useSwitchGraph(editor, _displayedGraph);
 
     const isSubgraph = computed(() => displayedGraph.value && displayedGraph.value !== editor.value.graph);
@@ -85,6 +87,8 @@ export function useRaflogn(existingEditor?: Editor): IRaflognViewModel {
                 newValue.nodeHooks.afterSave.unsubscribe(token);
                 newValue.graphTemplateHooks.beforeLoad.unsubscribe(token);
                 newValue.graphTemplateHooks.afterSave.unsubscribe(token);
+                newValue.graph.hooks.load.unsubscribe(token);
+                newValue.graph.hooks.save.unsubscribe(token);
             }
             if (newValue) {
                 newValue.nodeHooks.beforeLoad.subscribe(token, (state, node) => {
@@ -107,6 +111,16 @@ export function useRaflogn(existingEditor?: Editor): IRaflognViewModel {
                 newValue.graphTemplateHooks.afterSave.subscribe(token, (state, template) => {
                     state.panning = template.panning;
                     state.scaling = template.scaling;
+                    return state;
+                });
+                newValue.graph.hooks.load.subscribe(token, (state, graph) => {
+                    graph.panning = state.panning;
+                    graph.scaling = state.scaling;
+                    return state;
+                });
+                newValue.graph.hooks.save.subscribe(token, (state, graph) => {
+                    state.panning = graph.panning;
+                    state.scaling = graph.scaling;
                     return state;
                 });
 

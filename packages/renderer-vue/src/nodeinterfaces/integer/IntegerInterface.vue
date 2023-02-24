@@ -1,5 +1,5 @@
 <template>
-    <div class="raflogn-num-input">
+    <div class="baklava-num-input">
         <div class="__button --dec" @click="decrement">
             <i-arrow />
         </div>
@@ -16,7 +16,7 @@
                 ref="inputEl"
                 v-model="tempValue"
                 type="number"
-                class="raflogn-input"
+                class="baklava-input"
                 :class="{ '--invalid': invalid }"
                 style="text-align: right"
                 @blur="leaveEditMode"

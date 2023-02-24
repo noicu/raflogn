@@ -1,13 +1,13 @@
-.raflogn-icon {
+.baklava-icon {
     display: block;
     height: 100%;
 
     &.--clickable {
         cursor: pointer;
-        transition: color var(--raflogn-visual-transition);
+        transition: color var(--baklava-visual-transition);
     }
 
     &.--clickable:hover {
-        color: var(--raflogn-control-color-primary);
+        color: var(--baklava-control-color-primary);
     }
 }

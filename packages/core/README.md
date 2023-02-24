@@ -5,7 +5,7 @@
 ## Usage
 
 ```
-const raflognjsCore = require('raflogn-core');
+const raflognCore = require('raflogn-core');
 
 // TODO: DEMONSTRATE API
 ```

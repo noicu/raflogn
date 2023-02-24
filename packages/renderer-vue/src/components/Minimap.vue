@@ -1,7 +1,7 @@
 <template>
     <canvas
         ref="canvas"
-        class="raflogn-minimap"
+        class="baklava-minimap"
         @mouseenter="mouseenter"
         @mouseleave="mouseleave"
         @mousedown.self="mousedown"

@@ -1,13 +1,15 @@
-import { RaflognEvent, DynamicSequentialHook, PreventableRaflognEvent, SequentialHook } from "@raflogn/events";
 import {
     AbstractNode,
     NodeInterface,
     IConnection,
     Editor,
-    GRAPH_NODE_TYPE_PREFIX,
     INodeUpdateEventData,
+    Graph,
+    CheckConnectionHookResult,
+    DummyConnection,
 } from "@raflogn/core";
-import { sortTopologically, containsCycle, expandGraph, ITopologicalSortingResult } from "./topologicalSorting";
+import { RaflognEvent, DynamicSequentialHook, PreventableRaflognEvent, SequentialHook } from "@raflogn/events";
+import { containsCycle } from "./topologicalSorting";
 
 /**
  * Key: node id
@@ -31,19 +33,15 @@ export enum EngineStatus {
 export abstract class BaseEngine<CalculationData, CalculationArgs extends Array<any>> {
     public events = {
         /**
-         * 该事件将在所有节点的“calculate”函数被调用之前被调用。
-         * 参数是节点将接收的 calculationData
+         * This event will be called before all the nodes `calculate` functions are called.
+         * The argument is the calculationData that the nodes will receive
          */
         beforeRun: new PreventableRaflognEvent<CalculationData, BaseEngine<CalculationData, CalculationArgs>>(this),
         /**
-         * 运行完成后立即调用此事件。
-         * 参数是计算的结果。
+         * This event is called as soon as a run is completed.
+         * The argument is the result of the calculation.
          */
         afterRun: new RaflognEvent<CalculationResult, BaseEngine<CalculationData, CalculationArgs>>(this),
-        /**
-         * 引擎状态改变时触发
-         * 参数是引擎的状态
-         */
         statusChange: new RaflognEvent<EngineStatus, BaseEngine<CalculationData, CalculationArgs>>(this),
     };
 
@@ -63,42 +61,48 @@ export abstract class BaseEngine<CalculationData, CalculationArgs extends Array<
         return this.internalStatus;
     }
 
-    protected order?: ITopologicalSortingResult;
     protected recalculateOrder = true;
+
     /** the internal status will never be set to running, as this is determined by the running flag */
     private internalStatus: EngineStatus = EngineStatus.Stopped;
     private isRunning = false;
 
     public constructor(protected editor: Editor) {
         this.editor.nodeEvents.update.subscribe(this, (data, node) => {
-            if (node.type.startsWith(GRAPH_NODE_TYPE_PREFIX) && data === null) {
-                this.internalOnChange(true);
-            } else {
-                this.internalOnChange(false, node, data!);
+            if (node.graph && !node.graph.loading && node.graph.activeTransactions === 0) {
+                this.internalOnChange(node, data ?? undefined);
             }
         });
 
-        this.editor.graphEvents.addNode.subscribe(this, () => {
-            this.internalOnChange(true);
-        });
-
-        this.editor.graphEvents.removeNode.subscribe(this, () => {
-            this.internalOnChange(true);
-        });
-
-        this.editor.graphEvents.checkConnection.subscribe(this, (c) => {
-            if (!this.checkConnection(c.from, c.to)) {
-                return false;
+        this.editor.graphEvents.addNode.subscribe(this, (node, graph) => {
+            this.recalculateOrder = true;
+            if (!graph.loading && graph.activeTransactions === 0) {
+                this.internalOnChange();
             }
         });
 
-        this.editor.graphEvents.addConnection.subscribe(this, () => {
-            this.internalOnChange(true);
+        this.editor.graphEvents.removeNode.subscribe(this, (node, graph) => {
+            this.recalculateOrder = true;
+            if (!graph.loading && graph.activeTransactions === 0) {
+                this.internalOnChange();
+            }
         });
 
-        this.editor.graphEvents.removeConnection.subscribe(this, () => {
-            this.internalOnChange(true);
+        this.editor.graphEvents.addConnection.subscribe(this, (c, graph) => {
+            this.recalculateOrder = true;
+            if (!graph.loading && graph.activeTransactions === 0) {
+                this.internalOnChange();
+            }
         });
+
+        this.editor.graphEvents.removeConnection.subscribe(this, (c, graph) => {
+            this.recalculateOrder = true;
+            if (!graph.loading && graph.activeTransactions === 0) {
+                this.internalOnChange();
+            }
+        });
+
+        this.editor.graphHooks.checkConnection.subscribe(this, (c) => this.checkConnection(c.from, c.to));
     }
 
     /** Start the engine. After started, it will run everytime the graph is changed. */
@@ -150,7 +154,7 @@ export abstract class BaseEngine<CalculationData, CalculationArgs extends Array<
         calculationData: CalculationData,
         ...args: CalculationArgs
     ): Promise<CalculationResult | null> {
-        if (this.events.beforeRun.emit(calculationData)) {
+        if (this.events.beforeRun.emit(calculationData).prevented) {
             return null;
         }
 
@@ -170,47 +174,71 @@ export abstract class BaseEngine<CalculationData, CalculationArgs extends Array<
         }
     }
 
+    /**
+     * Run a non-root graph. This method can be used by nodes to calculate internal graphs (e. g. GraphNode).
+     * DO NOT use this method for calculation of the root graph! It won't emit any events.
+     * @param graph The graph to execute
+     * @param inputs Map<NodeInterfaceId, value>
+     * @param calculationData The data which is provided to each node's `calculate` method
+     * @param args Additional data which is only provided to the engine
+     * @returns A promise that resolves to a map that maps rootNodes to their calculated value (what the calculation function of the node returned)
+     */
+    public abstract runGraph(
+        graph: Graph,
+        inputs: Map<string, any>,
+        calculationData: CalculationData,
+    ): Promise<CalculationResult>;
+
     /** Check whether a connection can be created.
      * A connection can not be created when it would result in a cyclic graph.
      * @param from The interface from which the connection would start
      * @param to The interface where the connection would end
      * @returns Whether the connection can be created
      */
-    public checkConnection(from: NodeInterface, to: NodeInterface): boolean {
-        const { nodes, connections } = expandGraph(this.editor.graph);
-
+    public checkConnection(from: NodeInterface, to: NodeInterface): CheckConnectionHookResult {
         if (from.templateId) {
-            const newFrom = this.findInterfaceByTemplateId(nodes, from.templateId);
+            const newFrom = this.findInterfaceByTemplateId(this.editor.graph.nodes, from.templateId);
             if (!newFrom) {
-                return true;
+                return { connectionAllowed: true, connectionsInDanger: [] };
             }
             from = newFrom;
         }
 
         if (to.templateId) {
-            const newTo = this.findInterfaceByTemplateId(nodes, to.templateId);
+            const newTo = this.findInterfaceByTemplateId(this.editor.graph.nodes, to.templateId);
             if (!newTo) {
-                return true;
+                return { connectionAllowed: true, connectionsInDanger: [] };
             }
             to = newTo;
         }
 
-        const dc = { from, to, id: "dc", destructed: false, isInDanger: false } as IConnection;
+        const dc = new DummyConnection(from, to);
 
-        const copy = connections.concat([dc]);
-        // TODO: Only filter if to doesn't allow multiple connections
-        copy.filter((conn) => conn.to !== to);
-        return containsCycle(nodes, copy);
+        let copy: IConnection[] = this.editor.graph.connections.slice();
+        if (!to.allowMultipleConnections) {
+            copy = copy.filter((conn) => conn.to !== to);
+        }
+        copy.push(dc);
+
+        if (containsCycle(this.editor.graph.nodes, copy)) {
+            return { connectionAllowed: false, connectionsInDanger: [] };
+        }
+
+        return {
+            connectionAllowed: true,
+            connectionsInDanger: to.allowMultipleConnections
+                ? []
+                : this.editor.graph.connections.filter((c) => c.to === to),
+        };
     }
 
     /**
-     * Force the engine to recalculate the node execution order.
+     * Force the engine to recalculate the node execution order before the next run.
      * This is normally done automatically. Use this method if the
      * default change detection does not work in your scenario.
      */
     public calculateOrder(): void {
-        this.order = sortTopologically(this.editor.graph.nodes, this.editor.graph.connections);
-        this.recalculateOrder = false;
+        this.recalculateOrder = true;
     }
 
     /**
@@ -268,10 +296,9 @@ export abstract class BaseEngine<CalculationData, CalculationArgs extends Array<
         data?: INodeUpdateEventData,
     ): void;
 
-    private internalOnChange(recalculateOrder: boolean, updatedNode?: AbstractNode, data?: INodeUpdateEventData) {
-        this.recalculateOrder = this.recalculateOrder || recalculateOrder;
+    private internalOnChange(updatedNode?: AbstractNode, data?: INodeUpdateEventData) {
         if (this.internalStatus === EngineStatus.Idle) {
-            this.onChange(recalculateOrder, updatedNode, data);
+            this.onChange(this.recalculateOrder, updatedNode, data);
         }
     }
 

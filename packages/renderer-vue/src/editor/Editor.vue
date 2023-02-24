@@ -2,9 +2,9 @@
     <div
         ref="el"
         tabindex="-1"
-        class="raflogn-editor"
+        class="baklava-editor"
         :class="{
-            'raflogn-ignore-mouse': !!temporaryConnection || dragging,
+            'baklava-ignore-mouse': !!temporaryConnection || dragging,
             '--temporary-connection': !!temporaryConnection,
         }"
         @pointermove.self="onPointerMove"
@@ -28,7 +28,7 @@
 
         <svg class="connections-container">
             <g v-for="connection in connections" :key="connection.id + counter.toString()">
-                <slot name="connections" :connection="connection">
+                <slot name="connection" :connection="connection">
                     <connection-wrapper :connection="connection" />
                 </slot>
             </g>

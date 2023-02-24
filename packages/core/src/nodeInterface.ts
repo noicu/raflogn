@@ -30,6 +30,9 @@ export class NodeInterface<T = any> implements IRaflognEventEmitter, IRaflognTap
     /** Will be set automatically after the node was created */
     public isInput?: boolean;
 
+    /** Id of the node this interface is part of */
+    public nodeId = "";
+
     /** Whether to show the port (the thing connections connect to) */
     public port = true;
 
@@ -44,12 +47,12 @@ export class NodeInterface<T = any> implements IRaflognEventEmitter, IRaflognTap
         beforeSetValue: new PreventableRaflognEvent<T, NodeInterface<T>>(this),
         setValue: new RaflognEvent<T, NodeInterface<T>>(this),
         updated: new RaflognEvent<void, NodeInterface<T>>(this),
-    };
+    } as const;
 
     public hooks = {
         load: new SequentialHook<INodeInterfaceState<T>, NodeInterface<T>>(this),
         save: new SequentialHook<INodeInterfaceState<T>, NodeInterface<T>>(this),
-    };
+    } as const;
 
     private _connectionCount = 0;
     public set connectionCount(v: number) {
@@ -62,7 +65,7 @@ export class NodeInterface<T = any> implements IRaflognEventEmitter, IRaflognTap
 
     private _value: T;
     public set value(v: T) {
-        if (this.events.beforeSetValue.emit(v)) {
+        if (this.events.beforeSetValue.emit(v).prevented) {
             return;
         }
         this._value = v;

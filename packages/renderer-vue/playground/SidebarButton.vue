@@ -1,5 +1,5 @@
 <template>
-    <button class="raflogn-button --block" :title="intf.name" @click="onClick">
+    <button class="baklava-button --block" :title="intf.name" @click="onClick">
         {{ intf.name }}
     </button>
 </template>

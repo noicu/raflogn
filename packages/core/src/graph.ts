@@ -6,6 +6,7 @@ import {
     IRaflognTapable,
     PreventableRaflognEvent,
     SequentialHook,
+    ParallelHook,
 } from "@raflogn/events";
 import { Connection, DummyConnection, IConnection, IConnectionState } from "./connection";
 import type { Editor } from "./editor";
@@ -28,6 +29,22 @@ export interface IGraphState {
     outputs: IGraphInterface[];
 }
 
+export interface CheckConnectionHookResult {
+    connectionAllowed: boolean;
+    connectionsInDanger: IConnection[];
+}
+
+interface PositiveCheckConnectionResult extends CheckConnectionHookResult {
+    connectionAllowed: true;
+    dummyConnection: DummyConnection;
+}
+
+interface NegativeCheckConnectionResult {
+    connectionAllowed: false;
+}
+
+export type CheckConnectionResult = PositiveCheckConnectionResult | NegativeCheckConnectionResult;
+
 export class Graph implements IRaflognEventEmitter, IRaflognTapable {
     public id = uuidv4();
     public editor: Editor;
@@ -36,8 +53,12 @@ export class Graph implements IRaflognEventEmitter, IRaflognTapable {
     public inputs: IGraphInterface[] = [];
     public outputs: IGraphInterface[] = [];
 
+    public activeTransactions = 0;
+
     protected _nodes: AbstractNode[] = [];
     protected _connections: Connection[] = [];
+    protected _loading = false;
+    protected _destroying = false;
 
     public events = {
         beforeAddNode: new PreventableRaflognEvent<AbstractNode, Graph>(this),
@@ -49,12 +70,13 @@ export class Graph implements IRaflognEventEmitter, IRaflognTapable {
         checkConnection: new PreventableRaflognEvent<IAddConnectionEventData, Graph>(this),
         beforeRemoveConnection: new PreventableRaflognEvent<IConnection, Graph>(this),
         removeConnection: new RaflognEvent<IConnection, Graph>(this),
-    };
+    } as const;
 
     public hooks = {
         save: new SequentialHook<IGraphState, Graph>(this),
         load: new SequentialHook<IGraphState, Graph>(this),
-    };
+        checkConnection: new ParallelHook<IAddConnectionEventData, CheckConnectionHookResult, Graph>(this),
+    } as const;
 
     public nodeEvents = createProxy<AbstractNode["events"]>();
     public nodeHooks = createProxy<AbstractNode["hooks"]>();
@@ -71,6 +93,16 @@ export class Graph implements IRaflognEventEmitter, IRaflognTapable {
         return this._connections;
     }
 
+    /** Whether the graph is currently in the process of loading a saved graph */
+    public get loading() {
+        return this._loading;
+    }
+
+    /** Whether the graph is currently in the process of destroying itself */
+    public get destroying() {
+        return this._destroying;
+    }
+
     public constructor(editor: Editor, template?: GraphTemplate) {
         this.editor = editor;
         this.template = template;
@@ -83,15 +115,19 @@ export class Graph implements IRaflognEventEmitter, IRaflognTapable {
      * @returns Instance of the node or undefined if the node was not added
      */
     public addNode<T extends AbstractNode>(node: T): T | undefined {
-        if (this.events.beforeAddNode.emit(node)) {
+        if (this.events.beforeAddNode.emit(node).prevented) {
             return;
         }
         this.nodeEvents.addTarget(node.events);
         this.nodeHooks.addTarget(node.hooks);
         node.registerGraph(this);
         this._nodes.push(node);
-        this.events.addNode.emit(node);
+        // when adding the node to the array, it will be made reactive by Vue.
+        // However, our current reference is the non-reactive version.
+        // Therefore, we need to get the reactive version from the array.
+        node = this.nodes.find((n) => n.id === node.id)! as T;
         node.onPlaced();
+        this.events.addNode.emit(node);
         return node;
     }
 
@@ -102,7 +138,7 @@ export class Graph implements IRaflognEventEmitter, IRaflognTapable {
      */
     public removeNode(node: AbstractNode): void {
         if (this.nodes.includes(node)) {
-            if (this.events.beforeRemoveNode.emit(node)) {
+            if (this.events.beforeRemoveNode.emit(node).prevented) {
                 return;
             }
             const interfaces = [...Object.values(node.inputs), ...Object.values(node.outputs)];
@@ -124,21 +160,24 @@ export class Graph implements IRaflognEventEmitter, IRaflognTapable {
      * @returns The created connection. If no connection could be created, returns `undefined`.
      */
     public addConnection(from: NodeInterface<any>, to: NodeInterface<any>): Connection | undefined {
-        const dc = this.checkConnection(from, to);
-        if (!dc) {
+        const checkConnectionResult = this.checkConnection(from, to);
+        if (!checkConnectionResult.connectionAllowed) {
             return undefined;
         }
 
-        if (this.events.beforeAddConnection.emit({ from, to })) {
+        if (this.events.beforeAddConnection.emit({ from, to }).prevented) {
             return;
         }
 
-        const c = new Connection(dc.from, dc.to);
-        this.connectionEvents.addTarget(c.events);
-        this._connections.push(c);
+        for (const connectionToRemove of checkConnectionResult.connectionsInDanger) {
+            const instance = this.connections.find((c) => c.id === connectionToRemove.id);
+            if (instance) {
+                this.removeConnection(instance);
+            }
+        }
 
-        this.events.addConnection.emit(c);
-
+        const c = new Connection(checkConnectionResult.dummyConnection.from, checkConnectionResult.dummyConnection.to);
+        this.internalAddConnection(c);
         return c;
     }
 
@@ -148,7 +187,7 @@ export class Graph implements IRaflognEventEmitter, IRaflognTapable {
      */
     public removeConnection(connection: Connection): void {
         if (this.connections.includes(connection)) {
-            if (this.events.beforeRemoveConnection.emit(connection)) {
+            if (this.events.beforeRemoveConnection.emit(connection).prevented) {
                 return;
             }
             connection.destruct();
@@ -164,16 +203,16 @@ export class Graph implements IRaflognEventEmitter, IRaflognTapable {
      * @param to The target node interface (must be an input interface)
      * @returns Whether the connection is allowed or not.
      */
-    public checkConnection(from: NodeInterface<any>, to: NodeInterface<any>): false | DummyConnection {
+    public checkConnection(from: NodeInterface<any>, to: NodeInterface<any>): CheckConnectionResult {
         if (!from || !to) {
-            return false;
+            return { connectionAllowed: false };
         }
 
-        const fromNode = this.findNodeByInterface(from.id);
-        const toNode = this.findNodeByInterface(to.id);
+        const fromNode = this.findNodeById(from.nodeId);
+        const toNode = this.findNodeById(to.nodeId);
         if (fromNode && toNode && fromNode === toNode) {
             // connections must be between two separate nodes.
-            return false;
+            return { connectionAllowed: false };
         }
 
         if (from.isInput && !to.isInput) {
@@ -185,19 +224,29 @@ export class Graph implements IRaflognEventEmitter, IRaflognTapable {
 
         if (from.isInput || !to.isInput) {
             // connections are only allowed from input to output interface
-            return false;
+            return { connectionAllowed: false };
         }
 
         // prevent duplicate connections
         if (this.connections.some((c) => c.from === from && c.to === to)) {
-            return false;
+            return { connectionAllowed: false };
         }
 
-        if (this.events.checkConnection.emit({ from, to })) {
-            return false;
+        if (this.events.checkConnection.emit({ from, to }).prevented) {
+            return { connectionAllowed: false };
         }
 
-        return new DummyConnection(from, to);
+        const hookResults = this.hooks.checkConnection.execute({ from, to });
+        if (hookResults.some((hr) => !hr.connectionAllowed)) {
+            return { connectionAllowed: false };
+        }
+
+        const connectionsInDanger = Array.from(new Set(hookResults.flatMap((hr) => hr.connectionsInDanger)));
+        return {
+            connectionAllowed: true,
+            dummyConnection: new DummyConnection(from, to),
+            connectionsInDanger,
+        };
     }
 
     /**
@@ -222,63 +271,72 @@ export class Graph implements IRaflognEventEmitter, IRaflognTapable {
         }
     }
 
-    public findNodeByInterface(id: string): AbstractNode | undefined {
-        for (const node of this.nodes) {
-            if (
-                Object.values(node.inputs).some((intf) => intf.id === id) ||
-                Object.values(node.outputs).some((intf) => intf.id === id)
-            ) {
-                return node;
-            }
-        }
+    /**
+     * Finds the Node with the provided id, as long as it exists in this graph
+     * @param id id of the Node to find
+     * @returns The Node if found, otherwise undefined
+     */
+    public findNodeById(id: string): AbstractNode | undefined {
+        return this.nodes.find((n) => n.id === id);
     }
 
     /**
      * Load a state
      * @param state State to load
+     * @returns An array of warnings that occured during loading. If the array is empty, the state was successfully loaded.
      */
-    public load(state: IGraphState): void {
-        // Clear current state
-        for (let i = this.connections.length - 1; i >= 0; i--) {
-            this.removeConnection(this.connections[i]);
-        }
-        for (let i = this.nodes.length - 1; i >= 0; i--) {
-            this.removeNode(this.nodes[i]);
-        }
+    public load(state: IGraphState): string[] {
+        try {
+            this._loading = true;
+            const warnings: string[] = [];
 
-        // Load state
-        this.id = state.id;
-        this.inputs = state.inputs;
-        this.outputs = state.outputs;
-
-        for (const n of state.nodes) {
-            // find node type
-            const nodeInformation = this.editor.nodeTypes.get(n.type);
-            if (!nodeInformation) {
-                console.warn(`Node type ${n.type} is not registered`);
-                continue;
+            // Clear current state
+            for (let i = this.connections.length - 1; i >= 0; i--) {
+                this.removeConnection(this.connections[i]);
+            }
+            for (let i = this.nodes.length - 1; i >= 0; i--) {
+                this.removeNode(this.nodes[i]);
             }
 
-            const node = new nodeInformation.type();
-            this.addNode(node);
-            node.load(n);
-        }
+            // Load state
+            this.id = state.id;
+            this.inputs = state.inputs;
+            this.outputs = state.outputs;
 
-        for (const c of state.connections) {
-            const fromIf = this.findNodeInterface(c.from);
-            const toIf = this.findNodeInterface(c.to);
-            if (!fromIf) {
-                console.warn(`Could not find interface with id ${c.from}`);
-                continue;
-            } else if (!toIf) {
-                console.warn(`Could not find interface with id ${c.to}`);
-                continue;
-            } else {
-                this.addConnection(fromIf, toIf);
+            for (const n of state.nodes) {
+                // find node type
+                const nodeInformation = this.editor.nodeTypes.get(n.type);
+                if (!nodeInformation) {
+                    warnings.push(`Node type ${n.type} is not registered`);
+                    continue;
+                }
+
+                const node = new nodeInformation.type();
+                this.addNode(node);
+                node.load(n);
             }
-        }
 
-        this.hooks.load.execute(state);
+            for (const c of state.connections) {
+                const fromIf = this.findNodeInterface(c.from);
+                const toIf = this.findNodeInterface(c.to);
+                if (!fromIf) {
+                    warnings.push(`Could not find interface with id ${c.from}`);
+                    continue;
+                } else if (!toIf) {
+                    warnings.push(`Could not find interface with id ${c.to}`);
+                    continue;
+                } else {
+                    const conn = new Connection(fromIf, toIf);
+                    conn.id = c.id;
+                    this.internalAddConnection(conn);
+                }
+            }
+
+            this.hooks.load.execute(state);
+            return warnings;
+        } finally {
+            this._loading = false;
+        }
     }
 
     /**
@@ -301,6 +359,16 @@ export class Graph implements IRaflognEventEmitter, IRaflognTapable {
     }
 
     public destroy() {
+        this._destroying = true;
+        for (const n of this.nodes) {
+            this.removeNode(n);
+        }
         this.editor.unregisterGraph(this);
+    }
+
+    private internalAddConnection(c: Connection) {
+        this.connectionEvents.addTarget(c.events);
+        this._connections.push(c);
+        this.events.addConnection.emit(c);
     }
 }

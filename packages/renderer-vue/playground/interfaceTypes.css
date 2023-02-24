@@ -1,39 +1,39 @@
-.raflogn-node-interface[data-interface-type="string"] .__port {
+.baklava-node-interface[data-interface-type="string"] .__port {
     border-color: #ff7900;
 }
 
-.raflogn-node-interface[data-interface-type="string"] .__port::before {
+.baklava-node-interface[data-interface-type="string"] .__port::before {
     background-color: #ff7900;
 }
 
-.raflogn-node-interface[data-interface-type="number"] .__port {
+.baklava-node-interface[data-interface-type="number"] .__port {
     border-color: #4caf50;
 }
 
-.raflogn-node-interface[data-interface-type="number"] .__port::before {
+.baklava-node-interface[data-interface-type="number"] .__port::before {
     background-color: #4caf50;
 }
 
-.raflogn-node-interface[data-interface-type="boolean"] .__port {
+.baklava-node-interface[data-interface-type="boolean"] .__port {
     border-color: #e91e63;
 }
 
-.raflogn-node-interface[data-interface-type="boolean"] .__port::before {
+.baklava-node-interface[data-interface-type="boolean"] .__port::before {
     background-color: #e91e63;
 }
 
-.raflogn-node-interface[data-interface-type="array"] .__port {
+.baklava-node-interface[data-interface-type="array"] .__port {
     border-color: purple;
 }
 
-.raflogn-node-interface[data-interface-type="array"] .__port::before {
+.baklava-node-interface[data-interface-type="array"] .__port::before {
     background-color: purple;
 }
 
-.raflogn-node-interface[data-interface-type="object"] .__port {
+.baklava-node-interface[data-interface-type="object"] .__port {
     border-color: purple;
 }
 
-.raflogn-node-interface[data-interface-type="object"] .__port::before {
+.baklava-node-interface[data-interface-type="object"] .__port::before {
     background-color: purple;
 }

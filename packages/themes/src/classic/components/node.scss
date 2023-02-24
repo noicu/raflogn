@@ -1,11 +1,11 @@
-.raflogn-node {
+.baklava-node {
     max-width: 20rem;
-    background: var(--raflogn-node-color-background);
-    color: var(--raflogn-node-color-foreground);
-    border-radius: var(--raflogn-node-border-radius);
+    background: var(--baklava-node-color-background);
+    color: var(--baklava-node-color-foreground);
+    border-radius: var(--baklava-node-border-radius);
     position: absolute;
     filter: drop-shadow(0 0 3px #000000cc);
-    transition: box-shadow var(--raflogn-visual-transition), filter var(--raflogn-visual-transition);
+    transition: box-shadow var(--baklava-visual-transition), filter var(--baklava-visual-transition);
     box-shadow: 0 0 0 0.6px #00000000;
 
     &:hover {
@@ -14,7 +14,7 @@
 
     &.--selected {
         z-index: 5;
-        box-shadow: 0 0 0 1px var(--raflogn-node-color-selected);
+        box-shadow: 0 0 0 1px var(--baklava-node-color-selected);
     }
 
     &.--dragging {
@@ -27,10 +27,10 @@
 
     & > .__title {
         display: flex;
-        background: var(--raflogn-node-title-color-background);
-        color: var(--raflogn-node-title-color-foreground);
+        background: var(--baklava-node-title-color-background);
+        color: var(--baklava-node-title-color-foreground);
         padding: 0.4em 0.75em;
-        border-radius: var(--raflogn-node-border-radius) var(--raflogn-node-border-radius) 0 0;
+        border-radius: var(--baklava-node-border-radius) var(--baklava-node-border-radius) 0 0;
         cursor: grab;
 
         & > *:first-child {
@@ -47,9 +47,9 @@
         }
     }
 
-    &[data-node-type^="__raflogn_"] > .__title {
-        background: var(--raflogn-group-node-title-color-background);
-        color: var(--raflogn-group-node-title-color-foreground);
+    &[data-node-type^="__baklava_"] > .__title {
+        background: var(--baklava-group-node-title-color-background);
+        color: var(--baklava-group-node-title-color-foreground);
     }
 
     & > .__content {

@@ -1,7 +1,7 @@
-.raflogn-select {
+.baklava-select {
     width: 100%;
     position: relative;
-    color: var(--raflogn-control-color-foreground);
+    color: var(--baklava-control-color-foreground);
 
     &.--open > .__selected {
         border-bottom-left-radius: 0;
@@ -12,20 +12,20 @@
     }
 
     & > .__selected {
-        background-color: var(--raflogn-control-color-background);
+        background-color: var(--baklava-control-color-background);
         padding: 0.35em 0.75em;
-        border-radius: var(--raflogn-control-border-radius);
-        transition: background var(--raflogn-visual-transition);
+        border-radius: var(--baklava-control-border-radius);
+        transition: background var(--baklava-visual-transition);
         min-height: 1.7em;
         display: flex;
         align-items: center;
         cursor: pointer;
 
         &:hover {
-            background: var(--raflogn-control-color-hover);
+            background: var(--baklava-control-color-hover);
         }
         &:active {
-            background: var(--raflogn-control-color-active);
+            background: var(--baklava-control-color-active);
         }
 
         & > .__text {
@@ -46,8 +46,8 @@
             height: 18px;
 
             & path {
-                stroke: var(--raflogn-control-color-foreground);
-                fill: var(--raflogn-control-color-foreground);
+                stroke: var(--baklava-control-color-foreground);
+                fill: var(--baklava-control-color-foreground);
             }
         }
     }
@@ -58,9 +58,9 @@
         left: 0;
         right: 0;
         z-index: 10;
-        background-color: var(--raflogn-context-menu-background);
+        background-color: var(--baklava-context-menu-background);
         filter: drop-shadow(0 0 4px black);
-        border-radius: 0 0 var(--raflogn-control-border-radius) var(--raflogn-control-border-radius);
+        border-radius: 0 0 var(--baklava-control-border-radius) var(--baklava-control-border-radius);
 
         max-height: 15em;
         overflow-y: scroll;
@@ -77,17 +77,17 @@
             &:not(.--header):not(.--active) {
                 cursor: pointer;
                 &:hover {
-                    background: var(--raflogn-control-color-hover);
+                    background: var(--baklava-control-color-hover);
                 }
             }
 
             &.--active {
-                background: var(--raflogn-control-color-primary);
+                background: var(--baklava-control-color-primary);
             }
 
             &.--header {
-                color: var(--raflogn-control-color-disabled-foreground);
-                border-bottom: 1px solid var(--raflogn-control-color-disabled-foreground);
+                color: var(--baklava-control-color-disabled-foreground);
+                border-bottom: 1px solid var(--baklava-control-color-disabled-foreground);
                 padding: 0.5em 0.35em;
                 padding-left: 1em;
             }

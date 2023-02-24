@@ -5,7 +5,7 @@
 ## Usage
 
 ```
-const raflognjsFull = require('raflogn-full');
+const raflognFull = require('raflogn-full');
 
 // TODO: DEMONSTRATE API
 ```

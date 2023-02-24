@@ -1,34 +1,34 @@
 {
-    "name": "raflogn",
+    "name": "raflogn-monorepo",
     "private": true,
     "scripts": {
         "playground": "cd packages/renderer-vue && yarn run dev",
         "lint": "eslint \"packages/*/src/**/*.{ts,vue}\"",
-        "build": "lerna run build --stream --ignore \"raflogn\"",
+        "build": "lerna run build",
         "test": "lerna run test",
         "clean": "rimraf ./packages/*/dist && rimraf ./packages/full/lib",
         "generate-api-docs": "typedoc",
-        "docs:dev": "vitepress dev docs",
-        "docs:build": "vitepress build docs"
+        "docs:dev": "vuepress dev docs",
+        "docs:build": "vuepress build docs"
     },
     "workspaces": [
         "packages/*"
     ],
     "devDependencies": {
-        "@types/chai": "^4.3.0",
-        "@typescript-eslint/eslint-plugin": "^5.8.1",
-        "@typescript-eslint/parser": "^5.8.1",
-        "chai": "^4.3.4",
-        "eslint": "^8.6.0",
-        "eslint-config-prettier": "^8.3.0",
-        "eslint-plugin-vue": "^8.2.0",
-        "lerna": "^4.0.0",
-        "prettier": "^2.5.1",
-        "prettier-eslint": "^13.0.0",
+        "@typescript-eslint/eslint-plugin": "^5.47.1",
+        "@typescript-eslint/parser": "^5.47.1",
+        "@vuepress/plugin-register-components": "next",
+        "eslint": "^8.30.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-vue": "^9.8.0",
+        "lerna": "^6.3.0",
+        "mermaid": "^9.3.0",
+        "prettier": "^2.8.1",
+        "prettier-eslint": "^15.0.1",
         "rimraf": "^3.0.2",
-        "typedoc": "^0.22.10",
-        "typescript": "^4.5.4",
-        "vitepress": "^0.20.10",
-        "vue-eslint-parser": "^8.0.1"
+        "typedoc": "^0.23.23",
+        "typescript": "^4.9.4",
+        "vue-eslint-parser": "^9.1.0",
+        "vuepress": "next"
     }
 }
